@@ -1,0 +1,9 @@
+{
+	"scripts": {
+		"start": "node index"
+	},
+	"devDependencies": {
+		"express": "4.16.4",
+		"pg": "7.8.0"
+	}
+}
