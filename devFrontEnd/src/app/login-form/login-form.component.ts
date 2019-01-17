@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { faUserCircle, faUnlock, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-login-form',
@@ -10,17 +11,24 @@ export class LoginFormComponent implements OnInit {
 
   constructor() { }
 
-  profileForm = new FormGroup({
+  loginForm = new FormGroup({
     loginEmail: new FormControl(''),
     loginPassword: new FormControl(''),
   });
+
+  faUserCircleIcon = faUserCircle;
+  faUnlockIcon = faUnlock;
+  faSignInAltIcon = faSignInAlt;
 
   ngOnInit() {
   }
 
   onSubmit() {
-    // TODO: Use EventEmitter with form value
-    console.warn(this.profileForm.value);
+    console.warn(this.loginForm.value);
   }
+
+  validateFormLogin() {
+    
+}
 
 }

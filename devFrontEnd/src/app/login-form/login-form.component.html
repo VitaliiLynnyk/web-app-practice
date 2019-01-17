@@ -1,21 +1,21 @@
-<div class="container">
-  <div class="row">
-    <div class="col align-self-center">
-      <div class="card">
-        <div class="card-body">
-          <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-            <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email" formControlName="loginEmail" required>
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" formControlName="loginPassword" required>
-            </div>
-            <button type="submit" class="btn btn-primary" [disabled]="!profileForm.valid">Submit</button>
-          </form>
-        </div>
-      </div>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <div class="input-group mb-4">
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        <fa-icon [icon]="faUserCircleIcon"></fa-icon>
+      </span>
     </div>
+    <input type="email" class="form-control" id="loginEmail" placeholder="Enter email" formControlName="loginEmail" required>
   </div>
-</div>
+  <div class="input-group mb-4">
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        <fa-icon [icon]="faUnlockIcon"></fa-icon>
+      </span>
+    </div>
+    <input type="password" class="form-control" id="loginPassword" placeholder="Enter password" formControlName="loginPassword" required>
+  </div>
+  <div class="text-center">
+    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid"><fa-icon class="mr-2" [icon]="faSignInAltIcon"></fa-icon>Login</button>
+  </div>
+</form>
