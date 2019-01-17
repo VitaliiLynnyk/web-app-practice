@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -18,6 +19,7 @@ import { LoginFormComponent } from './login-form/login-form.component';
     AppRoutingModule,
     NgbModule,
     FontAwesomeModule,
+    FormsModule,
     ReactiveFormsModule
   ],
   providers: [],
