@@ -1,0 +1,73 @@
+{
+  "_from": "liquibase",
+  "_id": "liquibase@0.0.3",
+  "_inBundle": false,
+  "_integrity": "sha1-J/Jnjg8B2fENRdmKOc2SO9XPl+Q=",
+  "_location": "/liquibase",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "liquibase",
+    "name": "liquibase",
+    "escapedName": "liquibase",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/liquibase/-/liquibase-0.0.3.tgz",
+  "_shasum": "27f2678e0f01d9f10d45d98a39cd923bd5cf97e4",
+  "_spec": "liquibase",
+  "_where": "D:\\XAK\\practice\\web-app-practice",
+  "author": {
+    "name": "Pablo De Nadai",
+    "email": "pablodenadai@gmail.com",
+    "url": "https://github.com/pablodenadai/node-liquibase"
+  },
+  "bugs": {
+    "url": "https://github.com/pablodenadai/node-liquibase/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {},
+  "deprecated": false,
+  "description": "Node.js wrap for Liquibase",
+  "devDependencies": {
+    "ava": "^0.17.0",
+    "coveralls": "^2.11.12",
+    "nyc": "^10.0.0",
+    "xo": "^0.17.0"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "files": [
+    "index.js"
+  ],
+  "homepage": "https://github.com/pablodenadai/node-liquibase#readme",
+  "keywords": [
+    "liquibase",
+    "sql",
+    "postgresql",
+    "migration"
+  ],
+  "license": "MIT",
+  "name": "liquibase",
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pablodenadai/node-liquibase.git"
+  },
+  "scripts": {
+    "test": "xo && nyc ava --serial"
+  },
+  "version": "0.0.3"
+}
