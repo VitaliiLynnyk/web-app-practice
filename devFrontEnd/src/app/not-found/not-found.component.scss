@@ -1,0 +1,27 @@
+$margin-element: 0 0 15px 0;
+
+.container {
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  line-height: 1.2;
+  font-family: sans-serif;
+
+  .error-type, .error-name {
+    color: #555555;
+    font-weight: bold;
+    margin: $margin-element;
+  }
+
+  .error-type {
+    font-size: 2em;
+  }
+
+  .error-name {
+    font-size: 1.5em;
+  }
+
+  .error-description {
+    margin: $margin-element;
+  }
+}

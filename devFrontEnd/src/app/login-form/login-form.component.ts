@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import { Router } from '@angular/router';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {faUserCircle, faUnlock, faSignInAlt} from '@fortawesome/free-solid-svg-icons';
 
@@ -8,19 +9,19 @@ import {faUserCircle, faUnlock, faSignInAlt} from '@fortawesome/free-solid-svg-i
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
-  constructor() {
+  constructor(private router: Router) {
   }
 
   loginForm: FormGroup = new FormGroup({
     loginEmail: new FormControl('', [
       Validators.required,
-      Validators.email,
-      Validators.maxLength(100),
-      Validators.minLength(5)
+      Validators.pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/),
+      Validators.maxLength(50),
+      Validators.minLength(6)
     ]),
     loginPassword: new FormControl('', [
       Validators.required,
-      Validators.maxLength(100),
+      Validators.maxLength(50),
       Validators.minLength(5)
     ]),
   });
@@ -33,10 +34,6 @@ export class LoginFormComponent implements OnInit {
   errorMessagePassword = 'Please provide a password.';
 
   ngOnInit() {
-  }
-
-  onSubmit() {
-    console.log(this.loginForm.value);
   }
 
   validateEmailField(e) {
@@ -54,5 +51,11 @@ export class LoginFormComponent implements OnInit {
       this.errorMessagePassword = 'Must be 5-100 characters long.';
     }
   }
+
+  onSubmit() {
+    console.log(this.loginForm.value);
+    this.router.navigate(['home']);
+  }
+
 
 }
