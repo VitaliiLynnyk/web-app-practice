@@ -1,5 +1,4 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -13,12 +12,6 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AlertCloseableComponent } from './alert-closeable/alert-closeable.component';
-
-const appRouter: Routes = [
-  { path: '', component: LoginFormComponent},
-  { path: 'home', component: HomePageComponent},
-  { path: '**', component: NotFoundComponent}
-];
 
 @NgModule({
   declarations: [
@@ -35,8 +28,7 @@ const appRouter: Routes = [
     FontAwesomeModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule,
-    RouterModule.forRoot(appRouter)
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
