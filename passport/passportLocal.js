@@ -78,7 +78,7 @@ function generateJWT(user) {
 
 function checkAuthentication(req,res,next){
     let token = req.headers.token;
-    console.log("checkAUTH",req.headers);
+    console.log("checkAUTH",req.headers.token);
     if (token) {
         jwt.verify(token,process.env.SECRET, function(err, decoded) {
             if (err) {

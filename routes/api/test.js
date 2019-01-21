@@ -24,7 +24,7 @@ router.post('/signIn', function(req, res, next) {
             pool.query(`insert into Person_Token (person_id, token) values ($1, $2)`,[user.id, token], (error, results) => {
                 console.log(user.id, token);
                 if (error) {
-                    return res.status(401).json(error);
+                    return res.status(401).json(token);
                 }
                 res.status(200).json(results);
             });
@@ -43,10 +43,14 @@ router.post('/signUp', function(req, res, next) {
 });
 
 router.get("/logOut",checkAuthentication,(req, res, next) => {
-    pool.query(`delete from Person_Token where token=$1`,[req.headers.token], (error, results) => {
+    console.log('----------------',req.headers.token);
+    pool.query(`delete from Person_Token where token=$1`,[req.body.token], (error, results) => {
         if (error) {
             throw error;
         }
+        console.log(req.isAuthenticated());
+        req.logout();
+        console.log(req.isAuthenticated());
         res.status(200).json({"ok":"log out"});
     });
 });
