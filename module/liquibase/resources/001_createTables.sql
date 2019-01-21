@@ -24,7 +24,8 @@ create table Person(
 id SERIAL Primary Key,
 firstname VARCHAR(100) NOT NULL,
 lastname VARCHAR(100) NOT NULL,
-email VARCHAR(100) NOT NULL);
+email VARCHAR(100) NOT NULL,
+hash VARCHAR(100) NOT NULL);
 
 create table Person_Question_Answers(
 id SERIAL Primary Key,
@@ -33,3 +34,8 @@ person_id integer REFERENCES Person(id),
 survey_id integer REFERENCES Survey(id),
 question_answers_id integer REFERENCES Question_Answers(id));
 
+
+create table Person_Token(
+id SERIAL Primary Key,
+person_id integer REFERENCES Person(id),
+token VARCHAR(100) NOT NULL);
