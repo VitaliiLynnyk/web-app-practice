@@ -20,7 +20,14 @@ router.post('/signIn', function(req, res, next) {
         }else{
             let token = localStrategy.generateJWT(user);
             req.headers.token = token;
-            res.send(token);
+
+            pool.query(`insert into Person_Token (person_id, token) values ($1, $2)`,[user.id, token], (error, results) => {
+                console.log(user.id, token);
+                if (error) {
+                    return res.status(401).json(error);
+                }
+                res.status(200).json(results);
+            });
         }
     })(req, res, next);
 });
@@ -35,8 +42,17 @@ router.post('/signUp', function(req, res, next) {
     })(req, res, next);
 });
 
+router.get("/logOut",checkAuthentication,(req, res, next) => {
+    pool.query(`delete from Person_Token where token=$1`,[req.headers.token], (error, results) => {
+        if (error) {
+            throw error;
+        }
+        res.status(200).json({"ok":"log out"});
+    });
+});
+
 router.get("/res", (req, res, next) => {
-       pool.query(`select * from person`, (error, results) => {
+       pool.query(`select * from  Person_Token`, (error, results) => {
            if (error) {
                throw error;
            }
