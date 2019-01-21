@@ -13,14 +13,12 @@ const pool = require("../../db/connection").pool(
 let localStrategy = require('../../passport/passportLocal');
 let passport = require('passport');
 
-let generate = require('../../passport/passportLocal');
-
 router.post('/signIn', function(req, res, next) {
     passport.authenticate('signIn',{failureFlash:true}, function(err, user) {
         if (!user) {
             return res.status(401).json(req.flash('danger'));
         }else{
-            let token = generate.generateJWT(user);
+            let token = localStrategy.generateJWT(user);
             req.headers.token = token;
             res.send(token);
         }
@@ -38,14 +36,12 @@ router.post('/signUp', function(req, res, next) {
 });
 
 router.get("/res", (req, res, next) => {
-
        pool.query(`select * from person`, (error, results) => {
            if (error) {
                throw error;
            }
            res.status(200).json(results.rows);
        });
-
 });
 
 module.exports = router;

@@ -11,17 +11,17 @@ const pool = require("../db/connection").pool(
 );
 
 passport.use('signIn',new LocalStrategy({usernameField: 'email', passReqToCallback: true,session:false},function(req,email, password, done) {
-            pool.query(
+    pool.query(
                 `select * from Person where email=$1`,[email],
                 (err, res) => {
                     if (err) {
                         if (err) { return done(err); }
                     }
-                    if(res.rows[0] == null){
-                        req.flash("danger", "Oops. Incorrect login details.");
+                    if(res.rows[0] === null){
+                        req.flash("danger", "Oops. Email isnt exist");
                         return done(null, false);
                     }else {
-                        if(bcrypt.compareSync(password,bcrypt.hashSync(res.rows[0].password))){
+                        if(bcrypt.compareSync(password,res.rows[0].hash)){
                             return done(null, res.rows[0]);
                         }else {
                             req.flash("danger", "Oops. Incorrect login details.");
@@ -63,63 +63,18 @@ passport.use('signUp',new LocalStrategy({usernameField: 'email', passReqToCallba
     }
 }));
 
-
-// router.post("/signup", function(req, res) {
-//     if (
-//         req.body.firstname &&
-//         req.body.lastname &&
-//         req.body.email &&
-//         req.body.password
-//     ) {
-//         //console.log(bcrypt.hashSync(req.body.password)," ",bcrypt.compareSync(req.body.password,bcrypt.hashSync(req.body.password)));
-//         pool.query(
-//             `select * from Person where email=$1`,[req.body.email],(error, results)=>{
-//                 if (error) {
-//                     return res.status(401).send({
-//                         message: "Authentication failed. Something wrong"
-//                     });
-//                 }
-//                 if(results.rows.length === 0){
-//                     pool.query(
-//                         `insert into Person (firstname,lastname,email,hash) values ($1, $2, $3, $4)`,
-//                         [req.body.firstname, req.body.lastname, req.body.email,bcrypt.hashSync(req.body.password)],
-//                         (error, results) => {
-//                             if (error) {
-//                                 return res.status(401).send({
-//                                     message: "Authentication failed. Something wrong"
-//                                 });
-//                             }
-//                             res.status(200).json(results.rows);
-//                         }
-//                     );
-//                 }else{
-//                     return res.status(401).send({
-//                         message: "Authentication failed. User exist"
-//                     });
-//                 }
-//             });
-//     } else {
-//         return res.status(401).send({
-//             message: "Authentication failed. Please write email"
-//         });
-//     }
-// });
-
-
-
-    // User.findOne({ email: email }, function (err, user) {
-    //         if (err) { return done(err); }
-    //         if (!user) { return done(null, false); }
-    //         if (!user.validPassword(password)) { return done(null, false); }
-    //         return done(null, user);
-    //     });
-    // }
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
 passport.deserializeUser(function(user, done) {
     done(null, user);
 });
+
+function generateJWT(user) {
+    let expiry = new Date();
+    expiry.setDate(expiry.getDate() + 7);
+    return jwt.sign({...user,exp:parseInt(expiry.getTime() / 1000)},process.env.SECRET);
+};
 
 function checkAuthentication(req,res,next){
     let token = req.headers.token;
@@ -138,12 +93,6 @@ function checkAuthentication(req,res,next){
         res.json({status:401,error:'you are not authorized'});
     }
 }
-module.exports.generateJWT = function (user) {
-    let expiry = new Date();
-    expiry.setDate(expiry.getDate() + 7);
-    return jwt.sign({...user,exp:parseInt(expiry.getTime() / 1000)},process.env.SECRET);
-};
-
 module.exports = passport;
-
+module.exports.generateJWT = generateJWT;
 module.exports.checkAuthentication = checkAuthentication;
