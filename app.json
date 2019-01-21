@@ -1,0 +1,8 @@
+{
+    "name": "Web-practice",
+    "description": "",
+    "repository": "https://github.com/VitaliiLynnyk/web-app-practice/tree/devBackEnd",
+    "logo": "",
+    "keywords": ["node", "express", "heroku"],
+    "image": "heroku/nodejs"
+  }

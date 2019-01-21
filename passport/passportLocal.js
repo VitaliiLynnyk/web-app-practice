@@ -5,7 +5,7 @@ let bcrypt = require("bcrypt-nodejs");
 const pool = require("../db/connection").pool(
     process.env.USER,
     process.env.HOST,
-    process.env.USER,
+    process.env.DB,
     process.env.PASSWORD,
     process.env.PGQLPORT
 );

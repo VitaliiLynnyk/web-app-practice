@@ -6,7 +6,7 @@ let checkAuthentication = require('../../passport/passportLocal').checkAuthentic
 const pool = require("../../db/connection").pool(
   process.env.USER,
   process.env.HOST,
-  process.env.USER,
+  process.env.DB,
   process.env.PASSWORD,
   process.env.PGQLPORT
 );
@@ -38,16 +38,14 @@ router.post('/signUp', function(req, res, next) {
 });
 
 router.get("/res", (req, res, next) => {
-   if(req.isAuthenticated()){
+
        pool.query(`select * from person`, (error, results) => {
            if (error) {
                throw error;
            }
            res.status(200).json(results.rows);
        });
-   }else {
-       res.status(401).json({"error":"user is not autenteficated"})
-   }
+
 });
 
 module.exports = router;
