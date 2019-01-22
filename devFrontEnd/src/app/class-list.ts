@@ -3,6 +3,15 @@ export class User {
   password: string;
 }
 
+export class ErrorResponse {
+  message: string;
+}
+
+export class ServerResponse {
+  status: number;
+  error: ErrorResponse;
+}
+
 export class UserReg {
   firstname: string;
   lastname: string;

@@ -1,6 +1,8 @@
-<div class="alert-container">
-  <p *ngFor="let alert of alerts">
-    <ngb-alert [type]="alert.type" (close)="close(alert)">{{ alert.message }}</ngb-alert>
-  </p>
-</div>
-
+<p>
+  <ngb-alert *ngIf="alertMessage" type="danger" (close)="alertMessage = null">{{ alertMessage }}</ngb-alert>
+</p>
+<p>
+  <button type="button" (click)="close()">Close</button>
+</p><p>
+  <button type="button" (click)="show()">Show</button>
+</p>

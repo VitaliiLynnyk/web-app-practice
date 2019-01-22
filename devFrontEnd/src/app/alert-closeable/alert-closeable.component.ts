@@ -1,39 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-
-interface Alert {
-  type: string;
-  message: string;
-}
-
-const ALERTS: Alert[] = [
-    {
-      type: 'danger',
-      message: 'This user does not exist.'
-    },
-    {
-      type: 'danger',
-      message: 'Wrong password.'
-    }
-  ];
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-alert-closeable',
   templateUrl: './alert-closeable.component.html',
-  styleUrls: ['./alert-closeable.component.scss']
+  styleUrls: ['./alert-closeable.component.scss'],
+  providers: [AlertService]
 })
 export class AlertCloseableComponent implements OnInit {
 
-  constructor() { }
+  alertMessage: string;
+  nextMessage = 'This is test message';
 
-  // alerts: Alert[];
-
-  alerts = Array.from(ALERTS);
+  constructor(private alertService: AlertService) { }
 
   ngOnInit() {
   }
 
-  close(alert: Alert) {
-    this.alerts.splice(this.alerts.indexOf(alert), 1);
+  showAlert() {
+    console.log('error component - ' + this.alertService.alertGetText());
+    this.alertMessage = this.alertService.alertGetText();
+    setTimeout(() => this.alertMessage = null, 5000);
+  }
+
+  close() {
+    this.alertMessage = null;
+  }
+
+  show() {
+    this.showAlert();
   }
 
 
