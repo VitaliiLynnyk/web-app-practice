@@ -17,7 +17,8 @@ question_id integer REFERENCES Question(id));
 create table Question_Answers(
 id SERIAL Primary Key,
 question_id integer REFERENCES Question(id),
-answer VARCHAR(100) NOT NULL,
+answer VARCHAR(100),
+is_expanded Boolean NOT NULL,
 is_right Boolean NOT NULL);
 
 create table Person(
