@@ -10,7 +10,7 @@ const pool = require("../db/connection").pool(
     process.env.PGQLPORT
 );
 
-passport.use('signIn',new LocalStrategy({usernameField: 'email', passReqToCallback: true,session:false},function(req,email, password, done) {
+passport.use('signIn',new LocalStrategy({usernameField: 'email', passReqToCallback: true},function(req,email, password, done) {
     pool.query(
                 `select * from Person where email=$1`,[email],
                 (err, res) => {
@@ -30,7 +30,7 @@ passport.use('signIn',new LocalStrategy({usernameField: 'email', passReqToCallba
                     }
                 })}));
 
-passport.use('signUp',new LocalStrategy({usernameField: 'email', passReqToCallback: true,session:false},function(req,email, password, done) {
+passport.use('signUp',new LocalStrategy({usernameField: 'email', passReqToCallback: true,session: true},function(req,email, password, done) {
     if(email && password && req.body.firstname && req.body.lastname){
         pool.query(
             `select * from Person where email=$1`,[email],
@@ -78,7 +78,7 @@ function generateJWT(user) {
 
 function checkAuthentication(req,res,next){
     let token = req.headers.token;
-    console.log("checkAUTH",req.headers.token);
+    console.log("checkAUTH",req.isAuthenticated());
     if (token) {
         jwt.verify(token,process.env.SECRET, function(err, decoded) {
             if (err) {
