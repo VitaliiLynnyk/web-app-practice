@@ -7,8 +7,7 @@ description text NOT NULL);
 
 create table Question(
 id SERIAL Primary Key,
-question VARCHAR(100) NOT NULL,
-is_expended Boolean NOT NULL);
+question VARCHAR(100) NOT NULL);
 
 create table Survey_Questions(
 id SERIAL Primary Key,
@@ -31,7 +30,7 @@ hash VARCHAR(100) NOT NULL);
 
 create table Person_Question_Answers(
 id SERIAL Primary Key,
-expandedQuestion TEXT,
+fullAnswer TEXT,
 person_id integer REFERENCES Person(id),
 survey_id integer REFERENCES Survey(id),
 question_answers_id integer REFERENCES Question_Answers(id));
