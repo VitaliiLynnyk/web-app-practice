@@ -24,6 +24,7 @@ create table Person(
 id SERIAL Primary Key,
 firstname VARCHAR(100) NOT NULL,
 lastname VARCHAR(100) NOT NULL,
+is_admin Boolean NOT NULL,
 email VARCHAR(100) NOT NULL,
 hash VARCHAR(100) NOT NULL);
 

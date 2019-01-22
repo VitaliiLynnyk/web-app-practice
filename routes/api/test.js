@@ -1,6 +1,4 @@
 const router = require("express").Router();
-let bcrypt = require("bcrypt-nodejs");
-let jwt = require('jsonwebtoken');
 let checkAuthentication = require('../../passport/passportLocal').checkAuthentication;
 
 const pool = require("../../db/connection").pool(
