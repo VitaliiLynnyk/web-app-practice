@@ -8,7 +8,7 @@ description text NOT NULL);
 create table Question(
 id SERIAL Primary Key,
 question VARCHAR(100) NOT NULL,
-is_expanded Boolean NOT NULL);
+is_expended Boolean NOT NULL);
 
 create table Survey_Questions(
 id SERIAL Primary Key,
