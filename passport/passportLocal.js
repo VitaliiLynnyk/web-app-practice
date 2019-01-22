@@ -31,7 +31,7 @@ passport.use('signIn',new LocalStrategy({usernameField: 'email', passReqToCallba
                 })}));
 
 passport.use('signUp',new LocalStrategy({usernameField: 'email', passReqToCallback: true,session: true},function(req,email, password, done) {
-    if(email && password && req.body.firstname && req.body.lastname){
+    if(email && password && req.body.firstname && req.body.lastname && req.body.is_admin){
         pool.query(
             `select * from Person where email=$1`,[email],
             (err, res) => {
@@ -46,8 +46,8 @@ passport.use('signUp',new LocalStrategy({usernameField: 'email', passReqToCallba
                     return done(null,err);
                 }else {
                     pool.query(
-                        `insert into Person (firstname,lastname,email,hash) values ($1, $2, $3, $4)`,
-                        [req.body.firstname, req.body.lastname, req.body.email,bcrypt.hashSync(req.body.password)],
+                        `insert into Person (firstname,lastname,email,hash,is_admin) values ($1, $2, $3, $4, $5)`,
+                        [req.body.firstname, req.body.lastname, req.body.email,bcrypt.hashSync(req.body.password),req.body.is_admin],
                         (error, results) => {
                             if (error) {
                                 return done(error);
