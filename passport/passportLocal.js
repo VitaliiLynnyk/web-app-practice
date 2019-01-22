@@ -15,18 +15,20 @@ passport.use('signIn',new LocalStrategy({usernameField: 'email', passReqToCallba
                 `select * from Person where email=$1`,[email],
                 (err, res) => {
                     if (err) {
-                        if (err) { return done(err); }
+                        if (err) {
+                            req.flash("message", "Server Error");
+                            return done(err); }
                     }
-                    if(res.rows[0] === null){
-                        req.flash("danger", "Oops. Email isnt exist");
-                        return done(null, false);
-                    }else {
+                    if(res.rows[0]){
                         if(bcrypt.compareSync(password,res.rows[0].hash)){
                             return done(null, res.rows[0]);
                         }else {
-                            req.flash("danger", "Oops. Incorrect login details.");
+                            req.flash("message", "User is not exist");
                             return done(null, false);
                         }
+                    }else {
+                        req.flash("message", "Email is not exist");
+                        return done(null, false);
                     }
                 })}));
 
@@ -35,30 +37,29 @@ passport.use('signUp',new LocalStrategy({usernameField: 'email', passReqToCallba
         pool.query(
             `select * from Person where email=$1`,[email],
             (err, res) => {
-                console.log("select form person");
                 if (err) {
-                        req.flash("danger", err);
+                        req.flash("message", "Server Error");
                         return done(err);
                 }
                 if(res.rows[0]){
-                    console.log("email exist");
-                    req.flash("danger", "This email address is already registered.");
+                    req.flash("message", "This email address is already registered.");
                     return done(null,err);
                 }else {
                     pool.query(
                         `insert into Person (firstname,lastname,email,hash,is_admin) values ($1, $2, $3, $4, $5)`,
                         [req.body.firstname, req.body.lastname, req.body.email,bcrypt.hashSync(req.body.password),req.body.is_admin],
-                        (error, results) => {
+                        (error, res) => {
                             if (error) {
+                                req.flash("message", "Server Error");
                                 return done(error);
                             }
-                            return done(null,results.rows[0]);
+                            return done(null,{message:"done"});
                         }
                     );
                 }
             })
     }else {
-        req.flash("danger", "email, password, firstname, lastname are required.");
+        req.flash("message", "Email, password, firstname, lastname, is_admin are required.");
         return done();
     }
 }));
@@ -76,23 +77,42 @@ function generateJWT(user) {
     return jwt.sign({...user,exp:parseInt(expiry.getTime() / 1000)},process.env.SECRET);
 };
 
-function checkAuthentication(req,res,next){
+function checkAuthenticationIsAdmin(req,res,next){
     let token = req.headers.token;
-    console.log("checkAUTH",req.isAuthenticated());
     if (token) {
         jwt.verify(token,process.env.SECRET, function(err, decoded) {
             if (err) {
-                return res.json({ status: 401, error: 'Failed to authenticate token.' });
+                return res.status(401).json({ message:"Failed to authenticate token." });
             } else {
-                // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
-                next();
+                if(decoded.is_admin){
+                    req.decoded = decoded;
+                    next();
+                }else {
+                    return res.status(401).json({message: "You are not admin." });
+                }
             }
         });
     }else{
-        res.json({status:401,error:'you are not authorized'});
+        res.status(401).json({message:"You are not authorized"});
     }
 }
+function checkAuthentication(req,res,next){
+    let token = req.headers.token;
+    if (token) {
+        jwt.verify(token,process.env.SECRET, function(err, decoded) {
+            if (err) {
+                return res.status(401).json({message: "Failed to authenticate token." });
+            } else {
+                    req.decoded = decoded;
+                    next();
+            }
+        });
+    }else{
+        res.status(401).json({message:"you are not authorized"});
+    }
+}
+
 module.exports = passport;
 module.exports.generateJWT = generateJWT;
 module.exports.checkAuthentication = checkAuthentication;
+module.exports.checkAuthenticationIsAdmin = checkAuthenticationIsAdmin;

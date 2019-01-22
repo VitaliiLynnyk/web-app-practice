@@ -1,5 +1,6 @@
 const router = require("express").Router();
 let checkAuthentication = require('../../passport/passportLocal').checkAuthentication;
+let checkAuthenticationIsAdmin = require('../../passport/passportLocal').checkAuthenticationIsAdmin;
 
 const pool = require("../../db/connection").pool(
   process.env.USER,
@@ -13,21 +14,24 @@ let passport = require('passport');
 
 router.post('/signIn', function(req, res, next) {
     passport.authenticate('signIn',{failureFlash:true}, function(err, user) {
-        if (!user) {
-            return res.status(401).json(req.flash('danger'));
+        if (!user || err ) {
+            return res.status(401).json({message:req.flash("message")[0]});
         }else{
             let token = localStrategy.generateJWT(user);
             req.headers.token = token;
             req.login(user, (err) => {
                 if(err) {
-                    res.send(err);
+                    return res.status(401).json({message:"Server Error"});
                 }
                 pool.query(`insert into Person_Token (person_id, token) values ($1, $2)`,[user.id, token], (error, results) => {
-                    console.log(user.id, token);
                     if (error) {
-                        return res.status(401).json(token);
+                        return res.status(401).json({message:"Server Error"});
                     }
-                    res.status(200).json({"user": user, "token": token});
+                    if(results.rows){
+                        res.status(200).json({token: token});
+                    }else{
+                        res.status(401).json({message:"Server Error"});
+                    }
                 });
             });
         }
@@ -35,33 +39,32 @@ router.post('/signIn', function(req, res, next) {
 });
 
 router.post('/signUp', function(req, res, next) {
-    passport.authenticate('signUp',{failureFlash:true}, function(err, user) {
-        if (!user || err) {
-            return res.status(401).json(req.flash('danger'));
+    passport.authenticate('signUp',{failureFlash:true}, function(err, stat) {
+        if (!stat || err) {
+            return res.status(401).json({message:req.flash("message")[0]});
         }else{
-            res.send(user);
+            res.status(200).json({message: "done"});
         }
     })(req, res, next);
 });
 
 router.get("/logOut",checkAuthentication,(req, res, next) => {
-    pool.query(`delete from Person_Token where token=$1`,[req.headers.token], (error, results) => {
-        if (error) {
-            throw error;
-        }
-        console.log(req.isAuthenticated());
-        req.logout();
-        console.log(req.isAuthenticated());
-        res.status(200).json({"ok":"log out"});
-    });
+        pool.query(`delete from Person_Token where token=$1`,[req.headers.token], (error, results) => {
+            if (error) {
+                return res.status(401).json({message: "Server Error"});
+            }
+            let user = req.decoded;
+            req.logout();
+            res.status(200).json({message:`${user.firstname} is logOut`});
+        });
 });
 
-router.get("/res", (req, res, next) => {
+router.get("/res",checkAuthenticationIsAdmin, (req, res, next) => {
        pool.query(`select * from  Person_Token`, (error, results) => {
            if (error) {
-               throw error;
+               return res.status(401).json({message: "Server Error"});
            }
-           res.status(200).json(results.rows);
+           res.status(200).json({message:results.rows});
        });
 });
 
