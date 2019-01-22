@@ -7,7 +7,8 @@ description text NOT NULL);
 
 create table Question(
 id SERIAL Primary Key,
-question VARCHAR(100) NOT NULL);
+question VARCHAR(100) NOT NULL,
+is_expanded Boolean NOT NULL);
 
 create table Survey_Questions(
 id SERIAL Primary Key,
@@ -18,7 +19,6 @@ create table Question_Answers(
 id SERIAL Primary Key,
 question_id integer REFERENCES Question(id),
 answer VARCHAR(100),
-is_expanded Boolean NOT NULL,
 is_right Boolean NOT NULL);
 
 create table Person(
