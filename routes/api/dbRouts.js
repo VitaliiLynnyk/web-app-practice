@@ -86,7 +86,7 @@ router.get(
   "/questionPersonAnswers",
   checkAuthentication(false),
   (req, res, next) => {
-    pool.query(`select * from  Question_Person_Answers`, (err, result) => {
+    pool.query(`select question_person_answers.full_answer, question.question from question_person_answers inner join question_answers on question_answers.id = question_person_answers.question_answers_id inner join question on question_answers.question_id = question.id where question_person_answers.full_answer is not null and question_person_answers.survey_id=$1 UNION select question_answers.answer, question.question from question_person_answers inner join question_answers on question_answers.id = question_person_answers.question_answers_id inner join question on question_answers.question_id = question.id where question_person_answers.full_answer is null and question_person_answers.survey_id=$1`,[req.query.survey_id], (err, result) => {
       if (err) {
         return res.status(401).json({ message: "Server Error" });
       }
@@ -99,17 +99,19 @@ router.post(
   "/questionPersonAnswers",
   checkAuthentication(false),
   (req, res, next) => {
-    if (req.body.survey_id && req.question_answers_id) {
+    if (req.body.survey_id && req.body.question_answers_id) {
       pool.query(
-        `insert into Question_Person_Answers (survey_id, question_answers_id) values ($1, $2)`,
-        [req.body.survey_id, req.question_answers_id],
+        `insert into question_person_answers (survey_id, question_answers_id) values ($1,$2)`,
+        [req.body.survey_id, req.body.question_answers_id],
         (err, result) => {
           if (err) {
             return res.status(401).json({ message: "Server Error" });
           }
-          res.status(200).json({ message: "ok" });
+          res.status(200).json({ message: result });
         }
       );
+    } else {
+        return res.status(401).json({ message: "Server Error" });
     }
   }
 );
