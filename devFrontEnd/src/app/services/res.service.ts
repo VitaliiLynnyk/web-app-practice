@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map} from 'rxjs/operators';
-import {TestRes} from '../class-list';
+import {TestRes} from '../interfaces/interfaces-list';
 
 @Injectable()
 export class ResService {

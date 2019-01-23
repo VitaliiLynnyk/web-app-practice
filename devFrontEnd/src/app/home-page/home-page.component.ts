@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ResService } from '../services/res.service';
-import { TestRes } from '../class-list';
 
+import { ResService } from '../services/res.service';
 
 @Component({
   selector: 'app-home-page',
@@ -21,8 +20,8 @@ export class HomePageComponent implements OnInit {
         data => {
           this.testResources = data;
         },
-        err => {
-          console.log(err);
+        error => {
+          console.log(error);
         }
       );
   }

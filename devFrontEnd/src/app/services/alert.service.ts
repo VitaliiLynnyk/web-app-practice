@@ -1,32 +1,23 @@
 import { Injectable} from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+
+import { AlertObject } from '../interfaces/interfaces-list';
 
 @Injectable()
 export class AlertService {
+  alertSubscription$: Observable<any>;
+  private alertSubject = new Subject<any>();
 
-  constructor() {  }
-
-  public alertText: string;
-
-  alertSetText(temp: string) {
-    this.alertText = temp;
-    console.log('set temp - ' + temp);
-    console.log('set alertText - ' + this.alertText);
+  constructor() {
+    this.alertSubscription$ = this.alertSubject.asObservable();
   }
 
-  alertGetText(): string {
-    console.log('get alertText - ' + this.alertText);
-    const temp = this.alertText;
-    console.log('get temp - ' + temp);
-    this.alertClearText();
-    return temp;
-  }
-
-  alertClearText() {
-    this.alertText = undefined;
+  alertSetSubject(data, type) {
+    const temp: AlertObject = {
+      messageAlert: data,
+      typeAlert: type
+    };
+    this.alertSubject.next(temp);
   }
 
 }
-
-
-
-

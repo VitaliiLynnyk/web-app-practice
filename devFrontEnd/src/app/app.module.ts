@@ -7,13 +7,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AlertCloseableComponent } from './alert-closeable/alert-closeable.component';
-import {LoginService} from './services/login.service';
-import {AlertService} from './services/alert.service';
+
+import { LoginService } from './services/login.service';
+import { AlertService } from './services/alert.service';
+import { LogoutService } from './services/logout.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,8 @@ import {AlertService} from './services/alert.service';
   ],
   providers: [
     LoginService,
-    AlertService
+    AlertService,
+    LogoutService
   ],
   bootstrap: [AppComponent]
 })

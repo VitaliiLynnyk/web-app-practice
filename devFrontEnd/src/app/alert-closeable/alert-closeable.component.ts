@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+
 import { AlertService } from '../services/alert.service';
+
+import { AlertObject } from '../interfaces/interfaces-list';
 
 @Component({
   selector: 'app-alert-closeable',
@@ -9,36 +12,32 @@ import { AlertService } from '../services/alert.service';
 export class AlertCloseableComponent implements OnInit {
 
   alertMessage: string;
-  nextMessage = 'This is test message';
+  typeMessage: string;
+  timerContainer: any;
+  showingAlert = false;
 
-  constructor(private alertService: AlertService) { }
+  constructor(private alertService: AlertService) {
+    this.alertService.alertSubscription$.subscribe((temp: AlertObject) => {
+        this.closeAlert();
+        this.alertMessage = temp.messageAlert;
+        this.typeMessage = temp.typeAlert;
+        this.showAlert();
+      }
+    );
+  }
 
   ngOnInit() {
   }
 
-/*
-  testShowSet() {
-    console.log('error component - ' + this.alertService.alertGetText());
-  }
-*/
-
-
   showAlert() {
-    this.alertMessage = this.alertService.alertGetText();
     console.log('alertMessage - ' + this.alertMessage);
-    // this.alertMessage = this.nextMessage;
-    setTimeout(() => this.alertMessage = null, 5000);
+    this.showingAlert = true;
+    this.timerContainer = setTimeout(() => this.closeAlert(), 10000);
   }
 
-  close() {
-    this.alertMessage = null;
+  closeAlert() {
+    this.showingAlert = false;
+    clearTimeout(this.timerContainer);
   }
-
-  show() {
-    this.showAlert();
-    // this.testShowSet();
-  }
-
-
 
 }
