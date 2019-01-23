@@ -1,3 +1,3 @@
 <p>
-  <ngb-alert *ngIf="showingAlert" [type]="typeMessage" (close)="closeAlert()">{{ alertMessage }}</ngb-alert>
+  <ngb-alert [dismissible]="false" *ngIf="showingAlert" [type]="typeMessage" (click)="closeAlert()">{{ alertMessage }}</ngb-alert>
 </p>
