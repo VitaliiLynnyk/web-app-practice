@@ -12,6 +12,8 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AlertCloseableComponent } from './alert-closeable/alert-closeable.component';
+import {LoginService} from './services/login.service';
+import {AlertService} from './services/alert.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,10 @@ import { AlertCloseableComponent } from './alert-closeable/alert-closeable.compo
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    LoginService,
+    AlertService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

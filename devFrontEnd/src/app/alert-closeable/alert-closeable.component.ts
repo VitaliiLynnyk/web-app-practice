@@ -4,8 +4,7 @@ import { AlertService } from '../services/alert.service';
 @Component({
   selector: 'app-alert-closeable',
   templateUrl: './alert-closeable.component.html',
-  styleUrls: ['./alert-closeable.component.scss'],
-  providers: [AlertService]
+  styleUrls: ['./alert-closeable.component.scss']
 })
 export class AlertCloseableComponent implements OnInit {
 
@@ -17,9 +16,17 @@ export class AlertCloseableComponent implements OnInit {
   ngOnInit() {
   }
 
-  showAlert() {
+/*
+  testShowSet() {
     console.log('error component - ' + this.alertService.alertGetText());
+  }
+*/
+
+
+  showAlert() {
     this.alertMessage = this.alertService.alertGetText();
+    console.log('alertMessage - ' + this.alertMessage);
+    // this.alertMessage = this.nextMessage;
     setTimeout(() => this.alertMessage = null, 5000);
   }
 
@@ -29,7 +36,9 @@ export class AlertCloseableComponent implements OnInit {
 
   show() {
     this.showAlert();
+    // this.testShowSet();
   }
+
 
 
 }
