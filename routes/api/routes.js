@@ -1,5 +1,5 @@
 const test = require("./test");
 
-module.exports = function(app) {
+module.exports = (app) => {
   app.use("/api/", test);
 };

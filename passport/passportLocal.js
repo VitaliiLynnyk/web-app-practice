@@ -10,7 +10,7 @@ const pool = require("../db/connection").pool(
     process.env.PGQLPORT
 );
 
-passport.use('signIn',new LocalStrategy({usernameField: 'email', passReqToCallback: true},function(req,email, password, done) {
+passport.use('signIn',new LocalStrategy({usernameField: 'email', passReqToCallback: true},(req,email, password, done) =>{
     pool.query(
                 `select * from Person where email=$1`,[email],
                 (err, res) => {
@@ -32,7 +32,7 @@ passport.use('signIn',new LocalStrategy({usernameField: 'email', passReqToCallba
                     }
                 })}));
 
-passport.use('signUp',new LocalStrategy({usernameField: 'email', passReqToCallback: true,session: true},function(req,email, password, done) {
+passport.use('signUp',new LocalStrategy({usernameField: 'email', passReqToCallback: true,session: true},(req,email, password, done) =>{
     if(email && password && req.body.firstname && req.body.lastname && req.body.is_admin){
         pool.query(
             `select * from Person where email=$1`,[email],
@@ -77,18 +77,24 @@ function generateJWT(user) {
     return jwt.sign({...user,exp:parseInt(expiry.getTime() / 1000)},process.env.SECRET);
 };
 
-function checkAuthenticationIsAdmin(req,res,next){
+const checkAuthentication = isAdmin => (req,res,next) =>{
     let token = req.headers.token;
     if (token) {
         jwt.verify(token,process.env.SECRET, function(err, decoded) {
             if (err) {
                 return res.status(401).json({ message:"Failed to authenticate token." });
             } else {
-                if(decoded.is_admin){
-                    req.decoded = decoded;
-                    next();
+                if(isAdmin){
+					if(decoded.isAdmin){
+						 req.decoded = decoded;
+						next();
+					}else{
+						return res.status(401).json({message: "You are not admin." });
+					}
+                   
                 }else {
-                    return res.status(401).json({message: "You are not admin." });
+                    req.decoded = decoded;
+						next();
                 }
             }
         });
@@ -96,23 +102,7 @@ function checkAuthenticationIsAdmin(req,res,next){
         res.status(401).json({message:"You are not authorized"});
     }
 }
-function checkAuthentication(req,res,next){
-    let token = req.headers.token;
-    if (token) {
-        jwt.verify(token,process.env.SECRET, function(err, decoded) {
-            if (err) {
-                return res.status(401).json({message: "Failed to authenticate token." });
-            } else {
-                    req.decoded = decoded;
-                    next();
-            }
-        });
-    }else{
-        res.status(401).json({message:"you are not authorized"});
-    }
-}
 
 module.exports = passport;
 module.exports.generateJWT = generateJWT;
 module.exports.checkAuthentication = checkAuthentication;
-module.exports.checkAuthenticationIsAdmin = checkAuthenticationIsAdmin;

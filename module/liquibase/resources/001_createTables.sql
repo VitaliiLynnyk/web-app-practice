@@ -1,8 +1,17 @@
 --liquibase formatted sql
 --changeset liquibase:release_001_create_tables.sql
 
+create table Person(
+id SERIAL Primary Key,
+firstname VARCHAR(100) NOT NULL,
+lastname VARCHAR(100) NOT NULL,
+is_admin Boolean NOT NULL,
+email VARCHAR(100) NOT NULL,
+hash VARCHAR(100) NOT NULL);
+
 create table Survey(
 id SERIAL Primary Key,
+person_id integer REFERENCES Person(id),
 description text NOT NULL);
 
 create table Question(
@@ -20,18 +29,9 @@ question_id integer REFERENCES Question(id),
 answer VARCHAR(100),
 is_right Boolean NOT NULL);
 
-create table Person(
+create table Question_Person_Answers(
 id SERIAL Primary Key,
-firstname VARCHAR(100) NOT NULL,
-lastname VARCHAR(100) NOT NULL,
-is_admin Boolean NOT NULL,
-email VARCHAR(100) NOT NULL,
-hash VARCHAR(100) NOT NULL);
-
-create table Person_Question_Answers(
-id SERIAL Primary Key,
-fullAnswer TEXT,
-person_id integer REFERENCES Person(id),
+full_answer TEXT,
 survey_id integer REFERENCES Survey(id),
 question_answers_id integer REFERENCES Question_Answers(id));
 
