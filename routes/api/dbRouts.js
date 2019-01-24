@@ -20,20 +20,24 @@ router.get("/person_token", (req, res, next) => {
 });
 
 router.post("/authentication", (req, res, next) => {
-    if(req.headers.token){
-        pool.query(`select * from Person_Token where token=$1`, [req.body.token], (err, result) => {
-            if (err) {
-                return res.status(500).json({ message: "Server Error" });
-            }
-            if(result.rows){
-                return res.status(200).json({ message: true });
-            }else{
-                return res.status(401).json({ message: false });
-            }
-        });
-    }else {
-        return res.status(401).json({ message: false });
-    }
+  if (req.headers.token) {
+    pool.query(
+      `select * from Person_Token where token=$1`,
+      [req.body.token],
+      (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: "Server Error" });
+        }
+        if (result.rows) {
+          return res.status(200).json({ message: true });
+        } else {
+          return res.status(401).json({ message: false });
+        }
+      }
+    );
+  } else {
+    return res.status(401).json({ message: false });
+  }
 });
 
 router.get("/surveys", checkAuthentication(false), (req, res, next) => {
@@ -103,12 +107,26 @@ router.get(
   "/questionPersonAnswers",
   checkAuthentication(false),
   (req, res, next) => {
-    pool.query(`select question_person_answers.full_answer, question.question from question_person_answers inner join question_answers on question_answers.id = question_person_answers.question_answers_id inner join question on question_answers.question_id = question.id where question_person_answers.full_answer is not null and question_person_answers.survey_id=$1 UNION select question_answers.answer, question.question from question_person_answers inner join question_answers on question_answers.id = question_person_answers.question_answers_id inner join question on question_answers.question_id = question.id where question_person_answers.full_answer is null and question_person_answers.survey_id=$1`,[req.query.survey_id], (err, result) => {
-      if (err) {
-        return res.status(401).json({ message: "Server Error" });
+    pool.query(
+      `select question_person_answers.full_answer,question.question 
+        from question_person_answers 
+            inner join question_answers on question_answers.id = question_person_answers.question_answers_id
+            inner join question on question_answers.question_id = question.id 
+        where question_answers.answer is null and question_person_answers.survey_id=$1 
+       UNION 
+      select question_answers.answer, question.question 
+        from question_person_answers
+            inner join question_answers on question_answers.id = question_person_answers.question_answers_id
+            inner join question on question_answers.question_id = question.id
+       where question_answers.answer is not null and question_person_answers.survey_id=$1`,
+      [req.query.survey_id],
+      (err, result) => {
+        if (err) {
+          return res.status(401).json({ message: "Server Error" });
+        }
+        res.status(200).json({ message: result.rows });
       }
-      res.status(200).json({ message: result.rows });
-    });
+    );
   }
 );
 
@@ -118,8 +136,12 @@ router.post(
   (req, res, next) => {
     if (req.body.survey_id && req.body.question_answers_id) {
       pool.query(
-        `insert into question_person_answers (survey_id, question_answers_id) values ($1,$2)`,
-        [req.body.survey_id, req.body.question_answers_id],
+        `insert into question_person_answers (survey_id, question_answers_id,full_answer) values ($1,$2,$3)`,
+        [
+          req.body.survey_id,
+          req.body.question_answers_id,
+          req.body.full_answer
+        ],
         (err, result) => {
           if (err) {
             return res.status(401).json({ message: "Server Error" });
@@ -128,7 +150,7 @@ router.post(
         }
       );
     } else {
-        return res.status(401).json({ message: "Server Error" });
+      return res.status(401).json({ message: "Server Error" });
     }
   }
 );
