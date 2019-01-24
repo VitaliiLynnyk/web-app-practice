@@ -29,9 +29,9 @@ router.post("/authentication", (req, res, next) => {
           return res.status(500).json({ message: "Server Error" });
         }
         if (result.rows[0]) {
-          return res.status(200).json({ message: true });
+          return res.status(200).json({ message: "" });
         } else {
-          return res.status(401).json({ message: false });
+          return res.status(401).json({ message: "" });
         }
       }
     );
