@@ -20,12 +20,12 @@ router.get("/person_token", (req, res, next) => {
 });
 
 router.post("/routes", (req, res, next) => {
-    if(req.body.token){
+    if(req.headers.token){
         pool.query(`select * from Person_Token where token=$1`, [req.body.token], (err, result) => {
             if (err) {
                 return res.status(500).json({ message: "Server Error" });
             }
-            if(result.rows[0]){
+            if(result.rows){
                 return res.status(200).json({ message: true });
             }else{
                 return res.status(401).json({ message: false });
