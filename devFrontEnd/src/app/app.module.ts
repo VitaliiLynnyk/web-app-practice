@@ -14,9 +14,10 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AlertCloseableComponent } from './alert-closeable/alert-closeable.component';
 
-import { LoginService } from './services/login.service';
+import { AuthService } from './services/auth.service';
 import { AlertService } from './services/alert.service';
-import { LogoutService } from './services/logout.service';
+
+import { AuthGuard } from './guards/auth.guard';
 
 @NgModule({
   declarations: [
@@ -36,9 +37,9 @@ import { LogoutService } from './services/logout.service';
     ReactiveFormsModule
   ],
   providers: [
-    LoginService,
-    AlertService,
-    LogoutService
+    AuthService,
+    AuthGuard,
+    AlertService
   ],
   bootstrap: [AppComponent]
 })

@@ -15,12 +15,14 @@ export class AlertCloseableComponent implements OnInit {
   typeMessage: string;
   timerContainer: any;
   showingAlert = false;
+  timeMessage = 5000;
 
   constructor(private alertService: AlertService) {
     this.alertService.alertSubscription$.subscribe((temp: AlertObject) => {
         this.closeAlert();
         this.alertMessage = temp.messageAlert;
         this.typeMessage = temp.typeAlert;
+        if (temp.timeAlert) { this.timeMessage = temp.timeAlert; }
         this.showAlert();
       }
     );
@@ -32,7 +34,7 @@ export class AlertCloseableComponent implements OnInit {
   showAlert() {
     console.log('alertMessage - ' + this.alertMessage);
     this.showingAlert = true;
-    this.timerContainer = setTimeout(() => this.closeAlert(), 10000);
+    this.timerContainer = setTimeout(() => this.closeAlert(), this.timeMessage);
   }
 
   closeAlert() {

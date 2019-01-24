@@ -3,9 +3,8 @@ import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { faUserCircle, faUnlock, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 
-import { LoginService } from '../services/login.service';
+import { AuthService } from '../services/auth.service';
 import { AlertService } from '../services/alert.service';
-import { LogoutService } from '../services/logout.service';
 
 import { ServerResponseError, ResponseMessage, ServerResponseOk } from '../interfaces/interfaces-list';
 
@@ -19,11 +18,10 @@ export class LoginFormComponent implements OnInit {
   loginForm: FormGroup = new FormGroup({
     loginEmail: new FormControl('', [
       Validators.required,
-      Validators.email,
-      // Validators.pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/),
+      Validators.email
     ]),
     loginPassword: new FormControl('', [
-      Validators.required,
+      Validators.required
     ]),
   });
 
@@ -36,24 +34,24 @@ export class LoginFormComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private loginService: LoginService,
-    private logoutService: LogoutService,
+    private authService: AuthService,
     private alertService: AlertService) {
   }
 
   ngOnInit() {
     if (localStorage.getItem('tokenSession')) {
-      this.logoutService.postLogoutSignal()
+      this.authService.postLogOut()
         .subscribe(
           (data: ResponseMessage) => {
             localStorage.removeItem('tokenSession');
             console.log('200 SERVER', data);
             this.alertService.alertSetSubject(data.message, 'warning');
-            // this.router.navigate(['home']);
           },
           (error: ServerResponseError) => {
             console.log('ERROR SERVER', error);
-            this.alertService.alertSetSubject(error.error.message, 'danger');
+            error.status === 401 ?
+              localStorage.removeItem('tokenSession')
+              : this.alertService.alertSetSubject(error.error.message, 'danger', error.status);
           }
         );
     }
@@ -71,20 +69,23 @@ export class LoginFormComponent implements OnInit {
 
   onSubmit() {
     console.log(this.loginForm.value);
-    this.loginService.postLoginData(this.loginForm.value)
+    this.authService.postLogIn(this.loginForm.value)
       .subscribe(
         (data: ServerResponseOk) => {
           console.log('200 SERVER', data);
           localStorage.setItem('tokenSession', data.token);
           console.log(localStorage.getItem('tokenSession'));
-          // this.router.navigate(['home']);
+          this.loginForm.reset();
+          this.router.navigate(['home']);
         },
         (error: ServerResponseError) => {
           console.log('ERROR SERVER', error);
-          this.alertService.alertSetSubject(error.error.message, 'danger');
+          this.alertService.alertSetSubject(error.error.message, 'danger', error.status);
+          this.loginForm.reset();
         }
       );
   }
+
 
 
 }

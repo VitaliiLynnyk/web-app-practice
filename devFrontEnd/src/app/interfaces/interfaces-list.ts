@@ -4,6 +4,7 @@ export interface User {
 }
 
 export interface ResponseMessage {
+  status?: number;
   message: string;
 }
 
@@ -13,12 +14,14 @@ export interface ServerResponseError {
 }
 
 export interface ServerResponseOk {
+  status: number;
   token: string;
 }
 
 export interface AlertObject {
   messageAlert: string;
   typeAlert: string;
+  timeAlert: number;
 }
 
 export interface UserReg {

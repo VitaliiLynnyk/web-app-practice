@@ -1,18 +1,13 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 import { AlertService } from '../services/alert.service';
 import { ResponseMessage, ServerResponseError } from '../interfaces/interfaces-list';
 
-@Component({
-  selector: 'app-home-page',
-  templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.scss']
-})
-export class HomePageComponent implements OnChanges, OnInit {
-
-  result: string;
+@Injectable()
+export class AuthGuard implements CanActivate {
 
   constructor(
     private router: Router,
@@ -20,40 +15,37 @@ export class HomePageComponent implements OnChanges, OnInit {
     private alertService: AlertService) {
   }
 
-  ngOnChanges() {
-  }
-
-  ngOnInit() {
-
-    debugger;
-
-/*
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     if (localStorage.getItem('tokenSession')) {
       this.authService.postAuthentication()
         .subscribe(
           (data: ResponseMessage) => {
+            // debugger;
             console.log('200 SERVER', data);
-            this.result = data.message;
+            return true;
           },
           (error: ServerResponseError) => {
             console.log('ERROR SERVER', error);
-            if (error.error.message === 'false') {
+            if (!error.error.message) {
               this.router.navigate(['']);
               this.alertService.alertSetSubject('You are not authorized', 'danger', error.error.status);
+              return false;
             } else {
               this.alertService.alertSetSubject(error.error.message, 'danger', error.status);
+              return false;
             }
           }
         );
     } else {
       this.router.navigate(['']);
       this.alertService.alertSetSubject('You are not authorized', 'danger', 401);
+      return false;
     }
-*/
+
   }
 
-
-
 }
+
+
 
 

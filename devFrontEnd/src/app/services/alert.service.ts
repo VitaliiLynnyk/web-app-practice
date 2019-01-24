@@ -12,10 +12,12 @@ export class AlertService {
     this.alertSubscription$ = this.alertSubject.asObservable();
   }
 
-  alertSetSubject(data, type) {
+  alertSetSubject(data: string, type: string, status?: number, time?: number) {
+    if (status === 0) { data = 'No internet connection.'; }
     const temp: AlertObject = {
       messageAlert: data,
-      typeAlert: type
+      typeAlert: type,
+      timeAlert: time
     };
     this.alertSubject.next(temp);
   }
