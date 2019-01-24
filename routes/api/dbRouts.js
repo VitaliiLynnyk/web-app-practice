@@ -28,7 +28,7 @@ router.post("/authentication", (req, res, next) => {
         if (err) {
           return res.status(500).json({ message: "Server Error" });
         }
-        if (result.rows) {
+        if (result.rows[0]) {
           return res.status(200).json({ message: true });
         } else {
           return res.status(401).json({ message: false });
@@ -71,9 +71,13 @@ router.post("/surveys", checkAuthentication(false), (req, res, next) => {
 
 router.get(
   "/survey_questions",
-  checkAuthentication(false),
   (req, res, next) => {
-    pool.query(`select * from Survey_Questions`, (err, result) => {
+    pool.query(`
+     select question.question, STRING_AGG(question_answers.answer,' ') from survey_questions
+     inner join question on survey_questions.question_id = question.id
+     inner join question_answers on question.id = question_answers.question_id
+     group by question.question
+     `, (err, result) => {
       if (err) {
         return res.status(401).json({ message: "Server Error" });
       }
@@ -105,20 +109,22 @@ router.post(
 
 router.get(
   "/questionPersonAnswers",
-  checkAuthentication(false),
   (req, res, next) => {
     pool.query(
-      `select question_person_answers.full_answer,question.question 
-        from question_person_answers 
-            left join question_answers on question_answers.id = question_person_answers.question_answers_id
-            left join question on question_answers.question_id = question.id 
-        where question_answers.answer is null and question_person_answers.survey_id=$1 
-       UNION 
-      select question_answers.answer, question.question 
-        from question_person_answers
-            left join question_answers on question_answers.id = question_person_answers.question_answers_id
-            left join question on question_answers.question_id = question.id
-       where question_answers.answer is not null and question_person_answers.survey_id=$1`,
+      `select
+      question.question,
+        case 
+            when  
+                question_answers.answer is null
+            then
+              question_person_answers.full_answer
+            else
+            question_answers.answer
+            end
+            from question_person_answers 
+            inner join question_answers on question_answers.id = question_person_answers.question_answers_id
+            inner join question on question_answers.question_id = question.id 
+        where question_person_answers.survey_id=$1`,
       [req.query.survey_id],
       (err, result) => {
         if (err) {
