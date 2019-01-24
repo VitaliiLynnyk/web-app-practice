@@ -23,7 +23,7 @@ router.post("/authentication", (req, res, next) => {
   if (req.headers.token) {
     pool.query(
       `select * from Person_Token where token=$1`,
-      [req.body.token],
+      [req.headers.token],
       (err, result) => {
         if (err) {
           return res.status(500).json({ message: "Server Error" });
@@ -110,14 +110,14 @@ router.get(
     pool.query(
       `select question_person_answers.full_answer,question.question 
         from question_person_answers 
-            inner join question_answers on question_answers.id = question_person_answers.question_answers_id
-            inner join question on question_answers.question_id = question.id 
+            left join question_answers on question_answers.id = question_person_answers.question_answers_id
+            left join question on question_answers.question_id = question.id 
         where question_answers.answer is null and question_person_answers.survey_id=$1 
        UNION 
       select question_answers.answer, question.question 
         from question_person_answers
-            inner join question_answers on question_answers.id = question_person_answers.question_answers_id
-            inner join question on question_answers.question_id = question.id
+            left join question_answers on question_answers.id = question_person_answers.question_answers_id
+            left join question on question_answers.question_id = question.id
        where question_answers.answer is not null and question_person_answers.survey_id=$1`,
       [req.query.survey_id],
       (err, result) => {
