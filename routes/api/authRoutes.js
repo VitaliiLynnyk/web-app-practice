@@ -58,7 +58,7 @@ router.post("/logOut", checkAuthentication(false), (req, res, next) => {
     [req.headers.token],
     (error, results) => {
       if (error) {
-        return res.status(401).json({ message: "Server Error" });
+        return res.status(500).json({ message: "Server Error" });
       }
       let user = req.decoded;
       req.logout();
