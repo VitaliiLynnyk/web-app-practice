@@ -19,7 +19,7 @@ router.get("/person_token", (req, res, next) => {
   });
 });
 
-router.post("/routes", (req, res, next) => {
+router.post("/authentication", (req, res, next) => {
     if(req.headers.token){
         pool.query(`select * from Person_Token where token=$1`, [req.body.token], (err, result) => {
             if (err) {
@@ -57,7 +57,7 @@ router.post("/surveys", checkAuthentication(false), (req, res, next) => {
         if (err) {
           return res.status(401).json({ message: "Server Error" });
         }
-        res.status(200).json({ message: result.rows });
+        res.status(200).json({ message: "Done" });
       }
     );
   } else {
@@ -90,7 +90,7 @@ router.post(
           if (err) {
             return res.status(401).json({ message: "Server Error" });
           }
-          res.status(200).json({ message: result.rows });
+          res.status(200).json({ message: "Done" });
         }
       );
     } else {
@@ -124,7 +124,7 @@ router.post(
           if (err) {
             return res.status(401).json({ message: "Server Error" });
           }
-          res.status(200).json({ message: result });
+          res.status(200).json({ message: "Done" });
         }
       );
     } else {
