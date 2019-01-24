@@ -72,17 +72,22 @@ router.post("/surveys", checkAuthentication(false), (req, res, next) => {
 router.get(
   "/survey_questions",
   (req, res, next) => {
-    pool.query(`
-     select question.question, STRING_AGG(question_answers.answer,' ') from survey_questions
-     inner join question on survey_questions.question_id = question.id
-     inner join question_answers on question.id = question_answers.question_id
-     group by question.question
-     `, (err, result) => {
-      if (err) {
-        return res.status(401).json({ message: "Server Error" });
+      if(req.query.survey_id){
+          pool.query(`
+     select question_answers.id, question.question, question_answers.answer
+        from survey_questions
+            inner join question on survey_questions.question_id = question.id
+            inner join question_answers on question.id = question_answers.question_id
+            where survey_questions.survey_id=$1
+     `,[req.query.survey_id], (err, result) => {
+              if (err) {
+                  return res.status(401).json({ message: "Server Error" });
+              }
+              res.status(200).json({ message: result.rows });
+          });
+      }else {
+          return res.status(401).json({ message: "Server Error" });
       }
-      res.status(200).json({ message: result.rows });
-    });
   }
 );
 
@@ -112,7 +117,7 @@ router.get(
   (req, res, next) => {
     pool.query(
       `select
-      question.question,
+      question.question,question_answers.is_right,
         case 
             when  
                 question_answers.answer is null
