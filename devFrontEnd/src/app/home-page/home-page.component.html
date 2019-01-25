@@ -1,9 +1,37 @@
-<nav class="navbar sticky-top navbar-dark bg-primary">
-  <a class="navbar-brand" href="#">Test System</a>
-</nav>
+<header id="navbar-wrapper">
+  <nav class="navbar navbar-dark bg-primary fixed-top">
+    <button class="btn sidebar-toggler" type="button">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-content">
+      <a class="navbar-brand" href="#">
+        <img src="../../assets/img/favicon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Test System
+      </a>
+    </div>
+  </nav>
+</header>
+<div id="sidebar-wrapper" class="bg-primary">
+  <ul class="sidebar-nav">
+    <li class="sidebar-block">
+      <a href="" class="sidebar-link">Link</a>
+    </li>
+    <li class="sidebar-block">
+      <a href="" class="sidebar-link">Link</a>
+    </li>
+    <li class="sidebar-block">
+      <a href="" class="sidebar-link">Link</a>
+    </li>
+    <li class="sidebar-block">
+      <a href="" class="sidebar-link">Link</a>
+    </li>
+    <li class="sidebar-block">
+      <a href="" class="sidebar-link">Link</a>
+    </li>
+  </ul>
+</div>
+<main id="content-wrapper">
+  <p>Result - {{ result }}</p>
 
-<p>Result - {{ result }}</p>
-
-
-
-
+  <router-outlet></router-outlet>
+</main>

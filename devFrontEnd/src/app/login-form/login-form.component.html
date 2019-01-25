@@ -7,7 +7,7 @@
           <form [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()">
             <div class="form-group mb-4">
               <div class="input-group mb-2">
-                <div class="input-group-prepend">
+                <div class="input-group-prepend mr-3">
                   <span class="input-group-text"><fa-icon [icon]="emailIcon"></fa-icon></span>
                 </div>
                 <input type="email" class="form-control" id="loginEmail" placeholder="Enter email"
@@ -18,7 +18,7 @@
             </div>
             <div class="form-group mb-4">
               <div class="input-group mb-2">
-                <div class="input-group-prepend">
+                <div class="input-group-prepend mr-3">
                   <span class="input-group-text"><fa-icon [icon]="passwordIcon"></fa-icon></span>
                 </div>
                 <input type="password" class="form-control" id="loginPassword" placeholder="Enter password"
@@ -28,7 +28,7 @@
                      *ngIf="loginForm.controls['loginPassword'].invalid && loginForm.controls['loginPassword'].touched">{{ errorMessagePassword }}</small>
             </div>
             <div class="text-center">
-              <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">
+              <button type="submit" class="btn btn-raised btn-primary" [disabled]="!loginForm.valid">
                 <fa-icon class="mr-2" [icon]="buttonIcon"></fa-icon>Login
               </button>
             </div>

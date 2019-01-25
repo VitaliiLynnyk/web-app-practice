@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 import { AlertService } from '../services/alert.service';
+
 import { ResponseMessage, ServerResponseError } from '../interfaces/interfaces-list';
 
 @Injectable()
@@ -16,11 +17,15 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    return this.isAuthUser() ? true : false;
+  }
+
+  isAuthUser() {
+    let isAuth: any;
     if (localStorage.getItem('tokenSession')) {
-      this.authService.postAuthentication()
+      isAuth = this.authService.postAuthentication()
         .subscribe(
           (data: ResponseMessage) => {
-            // debugger;
             console.log('200 SERVER', data);
             return true;
           },
@@ -41,11 +46,6 @@ export class AuthGuard implements CanActivate {
       this.alertService.alertSetSubject('You are not authorized', 'danger', 401);
       return false;
     }
-
+    return isAuth;
   }
-
 }
-
-
-
-
