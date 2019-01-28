@@ -112,32 +112,38 @@ function generateJWT(user) {
 const checkAuthentication = isAdmin => (req, res, next) => {
   let token = req.headers.token;
   if (token) {
-      pool.query(`select * from Person_Token where token=$1`, [token], (err, result) => {
-          if(err){
-              return res.status(401).json({ message: "Server Error" });
-          }
-          if(result.rows[0]){
-              jwt.verify(token, process.env.SECRET, function(err, decoded) {
-                  if (err) {
-                      return res.status(401).json({ message: "You are not authorized" });
-                  } else {
-                      if (isAdmin) {
-                          if (decoded.isAdmin) {
-                              req.decoded = decoded;
-                              next();
-                          } else {
-                              return res.status(401).json({ message: "access deny" });
-                          }
-                      } else {
-                          req.decoded = decoded;
-                          next();
-                      }
-                  }
-              });
-          }else {
-              return res.status(401).json({ message: "You are not authorized" });
-          }
-      });
+    pool.query(
+      `select * from Person_Token where token=$1`,
+      [token],
+      (err, result) => {
+        if (err) {
+          return res.status(401).json({ message: "Server Error" });
+        }
+        if (result.rows[0]) {
+          jwt.verify(token, process.env.SECRET, function(err, decoded) {
+            if (err) {
+              return res
+                .status(401)
+                .json({ message: "You are not authorized" });
+            } else {
+              if (isAdmin) {
+                if (decoded.isAdmin) {
+                  req.decoded = decoded;
+                  next();
+                } else {
+                  return res.status(401).json({ message: "access deny" });
+                }
+              } else {
+                req.decoded = decoded;
+                next();
+              }
+            }
+          });
+        } else {
+          return res.status(401).json({ message: "You are not authorized" });
+        }
+      }
+    );
   } else {
     return res.status(401).json({ message: "You are not authorized" });
   }
