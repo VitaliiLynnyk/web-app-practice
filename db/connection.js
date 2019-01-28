@@ -1,12 +1,16 @@
+const Pool = require("pg").Pool;
 exports.pool = (user, host, database, password, port) => {
-  const cb = {
+  let pool = new Pool({
     user: user,
     host: host,
     database: database,
     password: password,
     port: port,
     ssl: true
-  };
-  let pool = require("pg-promise")();
-  return pool(cb);
+  });
+
+  pool.on("connect", () => {
+    console.log("connected to the db");
+  });
+  return pool;
 };
