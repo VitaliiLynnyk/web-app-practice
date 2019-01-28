@@ -1,4 +1,5 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
+import { faHome, faFileAlt, faPollH, faSignOutAlt, faBars } from '@fortawesome/free-solid-svg-icons';
 
 import { AlertService } from '../services/alert.service';
 
@@ -9,7 +10,12 @@ import { AlertService } from '../services/alert.service';
 })
 export class HomePageComponent implements OnChanges, OnInit {
 
-  result: string;
+  sidebarVisible = false;
+  burgerIcon = faBars;
+  homeIcon = faHome;
+  completedSurveyIcon = faFileAlt;
+  newSurveyIcon = faPollH;
+  logoutIcon = faSignOutAlt;
 
   constructor(private alertService: AlertService) {
   }
@@ -18,7 +24,12 @@ export class HomePageComponent implements OnChanges, OnInit {
   }
 
   ngOnInit() {
-    // this.alertService.alertSetSubject('It is test alert!', 'danger', 401, 100000);
+    this.alertService.alertSetSubject('It is test alert!', 'danger', 401, 100000);
+  }
+
+  toggleSidebar() {
+    this.sidebarVisible = !this.sidebarVisible;
+    console.log('sidebarVisible', this.sidebarVisible);
   }
 
 

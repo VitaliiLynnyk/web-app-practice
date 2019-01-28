@@ -34,11 +34,10 @@ export class AuthGuard implements CanActivate {
             if (!error.error.message) {
               this.router.navigate(['']);
               this.alertService.alertSetSubject('You are not authorized', 'danger', error.error.status);
-              return false;
             } else {
               this.alertService.alertSetSubject(error.error.message, 'danger', error.status);
-              return false;
             }
+            return false;
           }
         );
     } else {

@@ -1,37 +1,58 @@
-<header id="navbar-wrapper">
-  <nav class="navbar navbar-dark bg-primary fixed-top">
-    <button class="btn sidebar-toggler" type="button">
-      <span class="navbar-toggler-icon"></span>
+<div class="wrapper">
+  <header class="header bg-primary">
+    <button class="btn sidebar-toggler" type="button" (click)="toggleSidebar()">
+      <fa-icon class="fa-icon" [icon]="burgerIcon"></fa-icon>
     </button>
-    <div class="navbar-content">
-      <a class="navbar-brand" href="#">
-        <img src="../../assets/img/favicon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+    <div class="header-content">
+      <a routerLink="/home" class="btn header-brand">
+        <img src="../../assets/img/logo.png" alt="Logo" class="header-logo">
         Test System
       </a>
     </div>
+  </header>
+  <nav class="sidebar-wrapper bg-primary" [ngClass]="{'visible': sidebarVisible}">
+    <ul class="sidebar-nav">
+      <li class="sidebar-block">
+        <div class="account-info">
+          <img src="../../assets/img/user-icon-128.png" class="user-icon" alt="User icon">
+          <div class="nickname">Mark Fidel</div>
+        </div>
+      </li>
+      <li class="sidebar-block" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+        <a routerLink="/home" class="sidebar-link">
+          <fa-icon class="fa-icon" [icon]="homeIcon"></fa-icon>
+          Home
+        </a>
+      </li>
+      <li class="sidebar-block" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+        <a routerLink="#" class="sidebar-link">
+          <fa-icon class="fa-icon" [icon]="completedSurveyIcon"></fa-icon>
+          Completed survey
+        </a>
+      </li>
+      <li class="sidebar-block" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+        <a routerLink="#" class="sidebar-link">
+          <fa-icon class="fa-icon" [icon]="newSurveyIcon"></fa-icon>
+          New survey
+        </a>
+      </li>
+      <li class="sidebar-block">
+        <hr class="separator">
+      </li>
+      <li class="sidebar-block" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+        <a routerLink="" class="sidebar-link">
+          <fa-icon class="fa-icon" [icon]="logoutIcon"></fa-icon>
+          Logout
+        </a>
+      </li>
+    </ul>
   </nav>
-</header>
-<div id="sidebar-wrapper" class="bg-primary">
-  <ul class="sidebar-nav">
-    <li class="sidebar-block">
-      <a href="" class="sidebar-link">Link</a>
-    </li>
-    <li class="sidebar-block">
-      <a href="" class="sidebar-link">Link</a>
-    </li>
-    <li class="sidebar-block">
-      <a href="" class="sidebar-link">Link</a>
-    </li>
-    <li class="sidebar-block">
-      <a href="" class="sidebar-link">Link</a>
-    </li>
-    <li class="sidebar-block">
-      <a href="" class="sidebar-link">Link</a>
-    </li>
-  </ul>
+  <main class="content-wrapper" [ngClass]="{'fix-main-content': sidebarVisible}">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a tincidunt tellus, vel tincidunt arcu. Suspendisse ipsum ante, eleifend et nibh a, vulputate suscipit nisl. Phasellus scelerisque vehicula arcu id egestas. Donec at augue et eros dapibus tristique. Phasellus volutpat vehicula lectus et convallis. In hac habitasse platea dictumst. Aliquam pulvinar ac turpis vitae sodales. Donec pretium, est vel sodales ultrices, est purus laoreet leo, ut tristique arcu libero ac mi. Sed rutrum justo at odio feugiat mollis. Proin ultricies lobortis rutrum. Nulla tempor ipsum suscipit, elementum velit sit amet, suscipit enim. Etiam molestie odio sit amet pharetra eleifend.</p>
+    <p>Aliquam sit amet ante nec nisi interdum malesuada. Cras bibendum metus non nulla fringilla tempus. In pharetra gravida egestas. Ut id tristique tortor. Cras sagittis euismod ligula, et sollicitudin augue mollis sed. Vestibulum laoreet odio quis massa porta tempus. Proin faucibus sapien eget facilisis maximus. Cras fermentum mauris eget sem convallis, ut interdum nisi iaculis. Mauris ut risus et tellus porttitor consequat at et ex. In accumsan sapien ac ullamcorper lacinia. Nullam sapien ex, pellentesque ut magna eget, vehicula sollicitudin dui. Praesent viverra, quam a vehicula sodales, ligula tortor venenatis magna, eu pellentesque mi odio id lorem. Suspendisse quis consequat enim. Aliquam erat volutpat. Donec feugiat turpis diam, quis lobortis erat suscipit sed. Aenean euismod, odio quis ultricies auctor, nulla tortor luctus tortor, facilisis mollis justo ante sit amet velit.</p>
+    <p>Cras vehicula ex vitae nibh scelerisque, eget egestas leo dictum. Nunc a dolor vestibulum, cursus diam at, interdum tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam sem felis, suscipit et est sed, ornare scelerisque dolor. Phasellus sit amet enim ac magna vehicula laoreet eu sed felis. Integer lobortis augue venenatis, tristique dolor a, facilisis ligula. Morbi faucibus sapien sit amet mauris vulputate, a iaculis leo dignissim. Donec fringilla nec ante in porta. Mauris elit ex, dictum a bibendum vitae, luctus a lacus. Fusce tristique est non venenatis dictum.</p>
+    <p>Duis pretium risus quis enim sagittis maximus. Maecenas dictum posuere consectetur. Ut lacinia risus erat, eu tempus nibh condimentum in. Morbi feugiat iaculis dui non lacinia. Phasellus hendrerit nibh nisi, vitae elementum dolor fermentum non. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In feugiat mauris at posuere mattis. Quisque euismod vitae nisi quis aliquet. Maecenas a lorem in enim laoreet consequat ut vitae nisi. Integer mattis metus dui. Pellentesque id placerat metus.</p>
+    <p>Suspendisse a odio libero. Aliquam volutpat metus vel tempus mollis. Nullam ut erat at turpis ornare pretium. Nulla ultricies molestie nulla nec lobortis. Cras vel suscipit enim, a aliquam quam. Nunc ullamcorper nunc et nunc consectetur, id sodales erat porttitor. Vivamus imperdiet pharetra egestas. Suspendisse eros elit, tristique in mi tempor, tempus tincidunt lorem. In scelerisque nisl neque, vitae molestie quam pellentesque quis.</p>
+    <router-outlet></router-outlet>
+  </main>
 </div>
-<main id="content-wrapper">
-  <p>Result - {{ result }}</p>
-
-  <router-outlet></router-outlet>
-</main>
