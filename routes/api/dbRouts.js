@@ -42,7 +42,8 @@ router.post("/authentication", (req, res, next) => {
 
 router.get("/surveys", checkAuthentication(false), (req, res, next) => {
   pool.query(
-    `select Survey.id as survey_id, Survey.description, Person.firstname, Person.lastname from Person inner join Survey on Person.id = Survey.person_id`,
+    `select Survey.id as survey_id, Survey.description, Person.firstname, Person.lastname from Person
+     inner join Survey on Person.id = Survey.person_id`,
     (err, result) => {
       if (err) {
         return res.status(401).json({ message: "Server Error" });
@@ -69,27 +70,42 @@ router.post("/surveys", checkAuthentication(false), (req, res, next) => {
   }
 });
 
-router.get(
-  "/survey_questions",
-  (req, res, next) => {
-      if(req.query.survey_id){
-          pool.query(`
+router.get("/survey_questions", (req, res, next) => {
+  if (req.query.survey_id) {
+    pool.query(
+      `
      select question_answers.id, question.question, question_answers.answer
         from survey_questions
             inner join question on survey_questions.question_id = question.id
             inner join question_answers on question.id = question_answers.question_id
             where survey_questions.survey_id=$1
-     `,[req.query.survey_id], (err, result) => {
-              if (err) {
-                  return res.status(401).json({ message: "Server Error" });
-              }
-              res.status(200).json({ message: result.rows });
-          });
-      }else {
+     `,
+      [req.query.survey_id],
+      (err, result) => {
+        if (err) {
           return res.status(401).json({ message: "Server Error" });
+        }
+        const formatedQuestionAnswersArray = result.rows.reduce((acc, current) => {
+          const answers = acc[current.question] || [];
+          return {
+            ...acc,
+            [current.question]: [
+              ...answers,
+              { id: current.id, answer: current.answer }
+            ]
+          };
+        }, {});
+        let resArray = [];
+        for (let question in formatedQuestionAnswersArray) {
+            resArray.push({ question: question, answers: formatedQuestionAnswersArray[question] });
+        }
+        res.status(200).json({ message: resArray });
       }
+    );
+  } else {
+    return res.status(401).json({ message: "Server Error" });
   }
-);
+});
 
 router.post(
   "/survey_questions",
@@ -112,11 +128,10 @@ router.post(
   }
 );
 
-router.get(
-  "/questionPersonAnswers",
-  (req, res, next) => {
-    pool.query(
-      `select
+router.get("/questionPersonAnswers", (req, res, next) => {
+    if(req.query.survey_id){
+        pool.query(
+            `select
       question.question,question_answers.is_right,
         case 
             when  
@@ -130,16 +145,18 @@ router.get(
             inner join question_answers on question_answers.id = question_person_answers.question_answers_id
             inner join question on question_answers.question_id = question.id 
         where question_person_answers.survey_id=$1`,
-      [req.query.survey_id],
-      (err, result) => {
-        if (err) {
-          return res.status(401).json({ message: "Server Error" });
-        }
-        res.status(200).json({ message: result.rows });
-      }
-    );
-  }
-);
+            [req.query.survey_id],
+            (err, result) => {
+                if (err) {
+                    return res.status(401).json({ message: "Server Error" });
+                }
+                res.status(200).json({ message: result.rows });
+            }
+        );
+    }else {
+        return res.status(401).json({ message: "Server Error" });
+    }
+});
 
 router.post(
   "/questionPersonAnswers",
