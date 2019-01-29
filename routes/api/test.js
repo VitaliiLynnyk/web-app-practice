@@ -13,21 +13,11 @@ const pool = require("../../db/connection").pool(
 router.get("/test", (req, res, next) => {
 
     pool.query(
-        `select * from Question`,(err, statQuestion)=>{
+        `select * from survey_questions`,(err, statQuestion)=>{
             if (err) {
                 return res.status(401).json({ message: "Server Error" });
             }
-
-            let questionsCopyArray = [...statQuestion.rows];
-            let randomQuestionArray = [];
-            let length = 4;
-            for(let i = 0 ; i < length; i++){
-                let randomIndex = Math.floor(Math.random() * questionsCopyArray.length);
-
-                randomQuestionArray.push(questionsCopyArray[randomIndex]);
-                questionsCopyArray.splice(randomIndex,1);
-            }
-            res.status(200).json({ message: randomQuestionArray });
+            res.status(200).json({ message: statQuestion.rows });
         });
 });
 

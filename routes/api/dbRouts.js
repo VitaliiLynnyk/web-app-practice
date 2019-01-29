@@ -65,12 +65,36 @@ router.get("/surveys", checkAuthentication(false), (req, res, next) => {
 router.post("/surveys", checkAuthentication(false), (req, res, next) => {
   if (req.body.description && req.body.person_id) {
     pool.query(
-      `insert into Survey (description,person_id) values ($1, $2)`,
+      `insert into Survey (description,person_id) values ($1, $2) returning id`,
       [req.body.description, req.body.person_id],
       (err, statSurveys) => {
         if (err) {
           return res.status(401).json({ message: "Server Error" });
         }
+          pool.query(
+              `select * from Question`,(err, statQuestion)=>{
+                  if (err) {
+                      return res.status(401).json({ message: "Server Error" });
+                  }
+
+                  let questionsCopyArray = [...statQuestion.rows];
+                  let randomQuestionArray = [];
+                  let length = 4;
+                  for(let i = 0 ; i < length; i++){
+                      let randomIndex = Math.floor(Math.random() * questionsCopyArray.length);
+                      randomQuestionArray.push(questionsCopyArray[randomIndex]);
+                      questionsCopyArray.splice(randomIndex,1);
+                  }
+                  console.log(statSurveys.rows[0].id);
+                  randomQuestionArray.forEach(question =>{
+                      pool.query(`insert into survey_questions (survey_id, question_id) values ($1, $2)`,[statSurveys.rows[0].id,question.id],(err,res)=>{
+                          if(err){
+                              return res.status(401).json({ message: "Server Error" });
+                          }
+                      });
+                  });
+                  res.status(200).json({message: "done"});
+              });
       }
     );
   } else {
@@ -86,7 +110,7 @@ router.get(
         `select * from question_person_answers where survey_id=$1`,
         [req.query.survey_id],
         (err, result) => {
-          if (result.rows || err) {
+          if (!result.rows || err) {
               return res.status(401).json({ message: "survey complited" });
           } else {
             pool.query(
