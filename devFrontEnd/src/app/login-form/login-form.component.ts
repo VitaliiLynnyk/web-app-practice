@@ -76,7 +76,7 @@ export class LoginFormComponent implements OnInit {
         },
         (error: ServerResponseError) => {
           this.alertService.alertSetSubject(error.error.message, 'danger', error.status);
-          this.loginForm.reset();
+          this.loginForm.get('loginPassword').reset();
         }
       );
   }

@@ -18,6 +18,8 @@ import { AuthService } from './services/auth.service';
 import { AlertService } from './services/alert.service';
 
 import { AuthGuard } from './guards/auth.guard';
+import { HomeContentComponent } from './home-content/home-content.component';
+import { CompletedSurveysComponent } from './completed-surveys/completed-surveys.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { AuthGuard } from './guards/auth.guard';
     LoginFormComponent,
     HomePageComponent,
     NotFoundComponent,
-    AlertCloseableComponent
+    AlertCloseableComponent,
+    HomeContentComponent,
+    CompletedSurveysComponent
   ],
   imports: [
     BrowserModule,
