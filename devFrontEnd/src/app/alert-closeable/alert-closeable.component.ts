@@ -19,20 +19,22 @@ export class AlertCloseableComponent implements OnInit {
 
   constructor(private alertService: AlertService) {
     this.alertService.alertSubscription$.subscribe((temp: AlertObject) => {
+      if (!temp.messageAlert && !temp.typeAlert) {
+        this.closeAlert();
+      } else {
         this.closeAlert();
         this.alertMessage = temp.messageAlert;
         this.typeMessage = temp.typeAlert;
         if (temp.timeAlert) { this.timeMessage = temp.timeAlert; }
         this.showAlert();
       }
-    );
+    });
   }
 
   ngOnInit() {
   }
 
   showAlert() {
-    console.log('alertMessage - ' + this.alertMessage);
     this.showingAlert = true;
     this.timerContainer = setTimeout(() => this.closeAlert(), this.timeMessage);
   }

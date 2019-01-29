@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return this.isAuthUser() ? true : false;
+    return !!this.isAuthUser();
   }
 
   isAuthUser() {
@@ -26,11 +26,9 @@ export class AuthGuard implements CanActivate {
       isAuth = this.authService.postAuthentication()
         .subscribe(
           (data: ResponseMessage) => {
-            console.log('200 SERVER', data);
             return true;
           },
           (error: ServerResponseError) => {
-            console.log('ERROR SERVER', error);
             if (!error.error.message) {
               this.router.navigate(['']);
               this.alertService.alertSetSubject('You are not authorized', 'danger', error.error.status);

@@ -44,11 +44,9 @@ export class LoginFormComponent implements OnInit {
         .subscribe(
           (data: ResponseMessage) => {
             localStorage.removeItem('tokenSession');
-            console.log('200 SERVER', data);
             this.alertService.alertSetSubject(data.message, 'warning');
           },
           (error: ServerResponseError) => {
-            console.log('ERROR SERVER', error);
             error.status === 401 ?
               localStorage.removeItem('tokenSession')
               : this.alertService.alertSetSubject(error.error.message, 'danger', error.status);
@@ -68,18 +66,15 @@ export class LoginFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.loginForm.value);
     this.authService.postLogIn(this.loginForm.value)
       .subscribe(
         (data: ServerResponseOk) => {
-          console.log('200 SERVER', data);
           localStorage.setItem('tokenSession', data.token);
-          console.log(localStorage.getItem('tokenSession'));
           this.loginForm.reset();
           this.router.navigate(['home']);
+          this.alertService.alertSetSubject(null, null);
         },
         (error: ServerResponseError) => {
-          console.log('ERROR SERVER', error);
           this.alertService.alertSetSubject(error.error.message, 'danger', error.status);
           this.loginForm.reset();
         }

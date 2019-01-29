@@ -24,12 +24,11 @@ export class HomePageComponent implements OnChanges, OnInit {
   }
 
   ngOnInit() {
-    this.alertService.alertSetSubject('It is test alert!', 'danger', 401, 100000);
+    // this.alertService.alertSetSubject('It is test alert!', 'danger', 401, 100000);
   }
 
   toggleSidebar() {
     this.sidebarVisible = !this.sidebarVisible;
-    console.log('sidebarVisible', this.sidebarVisible);
   }
 
 
