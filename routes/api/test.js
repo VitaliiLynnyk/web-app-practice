@@ -11,42 +11,24 @@ const pool = require("../../db/connection").pool(
 );
 
 router.get("/test", (req, res, next) => {
-  let array = [
-    {
-      firstname: "test",
-      lastname: "test",
-      is_admin: false,
-      email: "test@test.com",
-      hash: "dsaddas"
-    },
-    {
-      firstname: "test",
-      lastname: "test",
-      is_admin: false,
-      email: "test@test.com",
-      hash: "dsaddas"
-    },
-    {
-      firstname: "test",
-      lastname: "test",
-      is_admin: false,
-      email: "test@test.com",
-      hash: "dsaddas"
-    }
-  ];
-  array.forEach(e => {
-    pool.query(
-      `insert into Person (firstname, lastname, is_admin, email, hash) values ($1, $2, $3, $4, $5)`,
-      [e.firstname, e.lastname, e.is_admin, e.email, e.hash],
-      (error, results) => {
-        if (error) {
-          return res.status(401).json({ message: "Server Error" });
-        }
-      }
-    );
-  });
 
-  res.status(200).json({ message: "ok" });
+    pool.query(
+        `select * from Question`,(err, statQuestion)=>{
+            if (err) {
+                return res.status(401).json({ message: "Server Error" });
+            }
+
+            let questionsCopyArray = [...statQuestion.rows];
+            let randomQuestionArray = [];
+            let length = 4;
+            for(let i = 0 ; i < length; i++){
+                let randomIndex = Math.floor(Math.random() * questionsCopyArray.length);
+
+                randomQuestionArray.push(questionsCopyArray[randomIndex]);
+                questionsCopyArray.splice(randomIndex,1);
+            }
+            res.status(200).json({ message: randomQuestionArray });
+        });
 });
 
 module.exports = router;

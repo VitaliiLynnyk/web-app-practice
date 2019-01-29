@@ -54,15 +54,14 @@ router.get("/surveys", checkAuthentication(false), (req, res, next) => {
 });
 
 router.post("/surveys", checkAuthentication(false), (req, res, next) => {
-  if (req.body.person_id && req.body.description) {
+  if (req.body.description && req.body.person_id) {
     pool.query(
       `insert into Survey (description,person_id) values ($1, $2)`,
       [req.body.description, req.body.person_id],
-      (err, result) => {
+      (err, statSurveys) => {
         if (err) {
           return res.status(401).json({ message: "Server Error" });
         }
-        res.status(200).json({ message: "Done" });
       }
     );
   } else {
