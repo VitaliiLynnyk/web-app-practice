@@ -11,20 +11,20 @@ const pool = require("../../db/connection").pool(
 );
 
 router.get("/personsList", checkAuthentication(false), (req, res, next) => {
-    pool.query(`select * from  Person`, (error, results) => {
-        if (error) {
+    pool.query(`select * from  Person`, (err, data) => {
+        if (err || !data.rows.length) {
             return res.status(401).json({ message: "Server Error" });
         }
-        res.status(200).send(results.rows);
+        res.status(200).send(data.rows);
     });
 });
 
 router.get("/person_token", (req, res, next) => {
-  pool.query(`select * from  Person_Token`, (error, results) => {
-    if (error) {
+  pool.query(`select * from  Person_Token`, (err, data) => {
+    if (err || !data.rows.length) {
       return res.status(401).json({ message: "Server Error" });
     }
-    res.status(200).json({ message: results.rows });
+    res.status(200).send(data.rows);
   });
 });
 
