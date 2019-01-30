@@ -10,7 +10,7 @@ const pool = require("../../db/connection").pool(
   process.env.PGQLPORT
 );
 
-router.get("/personsList", (req, res, next) => {
+router.get("/personsList",checkAuthentication(false), (req, res, next) => {
     pool.query(`select * from  Person where is_admin=false`, (err, data) => {
         if (err) {
             return res.status(401).json({ message: "Server Error" });
@@ -21,7 +21,7 @@ router.get("/personsList", (req, res, next) => {
     });
 });
 
-router.get("/personsTokens", (req, res, next) => {
+router.get("/personsTokens",checkAuthentication(false), (req, res, next) => {
   pool.query(`select * from  Person_Token`, (err, data) => {
     if (err) {
       return res.status(401).json({ message: "Server Error" });
@@ -34,7 +34,7 @@ router.get("/personsTokens", (req, res, next) => {
 
 
 
-router.post("/authentication", (req, res, next) => {
+router.post("/authentication",checkAuthentication(false), (req, res, next) => {
   if (req.headers.token) {
     pool.query(
       `select * from Person_Token where token=$1`,
@@ -55,7 +55,7 @@ router.post("/authentication", (req, res, next) => {
   }
 });
 
-router.get("/surveys", (req, res, next) => {
+router.get("/surveys",checkAuthentication(false), (req, res, next) => {
   pool.query(
     `select Survey.id as survey_id, Survey.description, Person.firstname, Person.lastname from Person
      inner join Survey on Person.id = Survey.person_id
