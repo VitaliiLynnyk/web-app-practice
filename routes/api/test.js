@@ -13,7 +13,7 @@ const pool = require("../../db/connection").pool(
 router.get("/test", (req, res, next) => {
 
     pool.query(
-        `select * from survey_questions`,(err, statQuestion)=>{
+        `insert into question_person_answers (survey_id, question_answers_id,full_answer) values ('1','13',null)`,(err, statQuestion)=>{
             if (err) {
                 return res.status(401).json({ message: "Server Error" });
             }
