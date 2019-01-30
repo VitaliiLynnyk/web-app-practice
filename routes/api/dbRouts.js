@@ -34,7 +34,7 @@ router.get("/personsTokens",checkAuthentication(false), (req, res, next) => {
 
 
 
-router.post("/authentication",checkAuthentication(false), (req, res, next) => {
+router.post("/authentication", (req, res, next) => {
   if (req.headers.token) {
     pool.query(
       `select * from Person_Token where token=$1`,
