@@ -21,7 +21,7 @@ router.get("/personsList",checkAuthentication(false), (req, res, next) => {
     });
 });
 
-router.get("/personsTokens",checkAuthentication(false), (req, res, next) => {
+router.get("/personsTokens", (req, res, next) => {
   pool.query(`select * from  Person_Token`, (err, data) => {
     if (err) {
       return res.status(401).json({ message: "Server Error" });
@@ -31,8 +31,6 @@ router.get("/personsTokens",checkAuthentication(false), (req, res, next) => {
     res.status(200).send(data.rows);
   });
 });
-
-
 
 router.post("/authentication", (req, res, next) => {
   if (req.headers.token) {
