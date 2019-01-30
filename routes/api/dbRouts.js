@@ -12,17 +12,21 @@ const pool = require("../../db/connection").pool(
 
 router.get("/personsList", checkAuthentication(false), (req, res, next) => {
     pool.query(`select * from  Person`, (err, data) => {
-        if (err || !data.rows.length) {
+        if (err) {
             return res.status(401).json({ message: "Server Error" });
+        }else if (!data.rows.length){
+            return res.status(404).json({ message: "Persons list is Empty" });
         }
         res.status(200).send(data.rows);
     });
 });
 
-router.get("/person_token", (req, res, next) => {
+router.get("/personsTokens", (req, res, next) => {
   pool.query(`select * from  Person_Token`, (err, data) => {
-    if (err || !data.rows.length) {
+    if (err) {
       return res.status(401).json({ message: "Server Error" });
+    }else if (!data.rows.length){
+        return res.status(404).json({ message: "Persons Tokens list is Empty" });
     }
     res.status(200).send(data.rows);
   });
@@ -35,11 +39,11 @@ router.post("/authentication", (req, res, next) => {
     pool.query(
       `select * from Person_Token where token=$1`,
       [req.headers.token],
-      (err, result) => {
+      (err, data) => {
         if (err) {
           return res.status(500).json({ message: "Server Error" });
         }
-        if (result.rows[0]) {
+        if (data.rows[0]) {
           return res.status(200).json({ message: "" });
         } else {
           return res.status(401).json({ message: "" });
@@ -55,11 +59,13 @@ router.get("/surveys", checkAuthentication(false), (req, res, next) => {
   pool.query(
     `select Survey.id as survey_id, Survey.description, Person.firstname, Person.lastname from Person
      inner join Survey on Person.id = Survey.person_id`,
-    (err, result) => {
+    (err, data) => {
       if (err) {
         return res.status(401).json({ message: "Server Error" });
+      }else if (!data.rows.length){
+          return res.status(404).json({ message: "surveys list is Empty" });
       }
-      res.status(200).json({ message: result.rows });
+      res.status(200).data(data.rows);
     }
   );
 });
@@ -206,11 +212,13 @@ router.get(
             inner join question on question_answers.question_id = question.id 
         where question_person_answers.survey_id=$1`,
         [req.query.survey_id],
-        (err, result) => {
-          if (err || !result.rows.length) {
+        (err, data) => {
+          if (err) {
             return res.status(401).json({ message: "Server Error" });
+          }else if (!data.rows.length){
+              return res.status(404).json({ message: "Persons Tokens list is Empty" });
           }
-          res.status(200).json({ message: result.rows });
+          res.status(200).send(data.rows);
         }
       );
     } else {
