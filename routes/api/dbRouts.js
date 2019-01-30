@@ -10,8 +10,8 @@ const pool = require("../../db/connection").pool(
   process.env.PGQLPORT
 );
 
-router.get("/personsList", checkAuthentication(false), (req, res, next) => {
-    pool.query(`select * from  Person`, (err, data) => {
+router.get("/personsList", (req, res, next) => {
+    pool.query(`select * from  Person where is_admin=false`, (err, data) => {
         if (err) {
             return res.status(401).json({ message: "Server Error" });
         }else if (!data.rows.length){
@@ -55,17 +55,18 @@ router.post("/authentication", (req, res, next) => {
   }
 });
 
-router.get("/surveys", checkAuthentication(false), (req, res, next) => {
+router.get("/surveys", (req, res, next) => {
   pool.query(
     `select Survey.id as survey_id, Survey.description, Person.firstname, Person.lastname from Person
-     inner join Survey on Person.id = Survey.person_id`,
+     inner join Survey on Person.id = Survey.person_id
+    `,
     (err, data) => {
       if (err) {
         return res.status(401).json({ message: "Server Error" });
       }else if (!data.rows.length){
           return res.status(404).json({ message: "surveys list is Empty" });
       }
-      res.status(200).data(data.rows);
+      res.status(200).send(data.rows);
     }
   );
 });
