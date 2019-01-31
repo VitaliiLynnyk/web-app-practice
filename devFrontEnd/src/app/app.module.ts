@@ -16,6 +16,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AlertCloseableComponent } from './alert-closeable/alert-closeable.component';
 import { HomeContentComponent } from './home-content/home-content.component';
 import { SurveysListComponent } from './surveys-list/surveys-list.component';
+import { CompletedSurveyInfoComponent } from './completed-survey-info/completed-survey-info.component';
+import { SurveyAnswerItemComponent } from './survey-answer-item/survey-answer-item.component';
 
 import { AuthService } from './services/auth.service';
 import { AlertService } from './services/alert.service';
@@ -31,7 +33,9 @@ import { AuthGuard } from './guards/auth.guard';
     NotFoundComponent,
     AlertCloseableComponent,
     HomeContentComponent,
-    SurveysListComponent
+    SurveysListComponent,
+    CompletedSurveyInfoComponent,
+    SurveyAnswerItemComponent
   ],
   imports: [
     BrowserModule,

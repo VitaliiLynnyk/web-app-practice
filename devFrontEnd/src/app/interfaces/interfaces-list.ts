@@ -19,10 +19,15 @@ export interface AlertObject {
   timeAlert: number;
 }
 
-export interface SurveyInfo {
+export interface SurveyDetails {
   description: string;
   firstname: string;
   lastname: string;
   survey_id: number;
 }
 
+export interface SurveyInfo {
+  question: string;
+  is_right: boolean;
+  answer: string;
+}

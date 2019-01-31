@@ -1,33 +1,50 @@
 .container-fluid {
   padding-top: 15px;
   padding-bottom: 15px;
-}
 
-.table {
+  .card-body {
+    overflow-x: scroll;
 
-  thead {
+    .table {
 
-    th {
-      font-weight: bold;
+      thead {
 
-      &:first-child, &:last-child {
-        text-align: center;
+        th {
+          font-weight: bold;
+          vertical-align: middle;
+
+          &:first-child, &:last-child {
+            text-align: center;
+          }
+        }
+      }
+
+      tbody {
+
+        td {
+          vertical-align: middle;
+
+          &:first-child, &:last-child {
+            text-align: center;
+          }
+
+          &:first-child {
+            font-weight: bold;
+          }
+        }
       }
     }
   }
+}
 
-  tbody {
+@media screen and (max-width: 540px) {
+  .card {
+    padding-left: 15px;
+    padding-right: 15px;
 
-    td {
-      vertical-align: middle;
-
-      &:first-child, &:last-child {
-        text-align: center;
-      }
-
-      &:first-child {
-        font-weight: bold;
-      }
+    .card-body {
+      padding-left: 0;
+      padding-right: 0;
     }
   }
 }

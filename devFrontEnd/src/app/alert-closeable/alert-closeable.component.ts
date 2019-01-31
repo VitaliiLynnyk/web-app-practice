@@ -43,5 +43,4 @@ export class AlertCloseableComponent implements OnInit {
     this.showingAlert = false;
     clearTimeout(this.timerContainer);
   }
-
 }

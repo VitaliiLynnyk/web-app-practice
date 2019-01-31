@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { SurveysService } from '../services/surveys.service';
+import { AlertService } from '../services/alert.service';
 
-import { SurveyInfo, ServerResponseError } from '../interfaces/interfaces-list';
+import { SurveyDetails, ServerResponseError } from '../interfaces/interfaces-list';
 
 @Component({
   selector: 'app-surveys-list',
@@ -11,26 +13,27 @@ import { SurveyInfo, ServerResponseError } from '../interfaces/interfaces-list';
 })
 export class SurveysListComponent implements OnInit {
 
-  surveysArray: Array<SurveyInfo>;
+  surveysArray: Array<SurveyDetails>;
 
-  constructor(private surveysService: SurveysService) { }
+  constructor(
+    private router: Router,
+    private alertService: AlertService,
+    private surveysService: SurveysService) { }
 
   ngOnInit() {
     this.surveysService.getSurveysList()
       .subscribe(
-        (data: Array<SurveyInfo>) => {
+        (data: Array<SurveyDetails>) => {
           this.surveysArray = data;
-          console.log('ARRAY OF SURVEYS\n', data);
         },
         (error: ServerResponseError) => {
-          console.log('ERROR surveysService.getSurveysList()\n', error);
+          this.alertService.alertSetSubject(error.error.message, 'warning');
         }
       );
-
   }
 
-  showInfo(idSurvey: number) {
-    console.log(idSurvey);
+  showInfo(temp: number) {
+    this.surveysService.setIdSurvey(temp);
+    this.router.navigate(['home/survey-info']);
   }
-
 }

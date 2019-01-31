@@ -4,18 +4,16 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class AuthService {
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {  }
 
   static createHeaderToken () {
     return new HttpHeaders().set('token', localStorage.getItem('tokenSession'));
   }
 
-  postLogIn(loginData) {
-    const bodyQuery = {email: loginData.loginEmail, password: loginData.loginPassword};
+  postLogIn(loginData: any) {
     return this.http.post(
       'https://web-app-practice.herokuapp.com/api/signIn',
-      bodyQuery
+      {email: loginData.loginEmail, password: loginData.loginPassword}
     );
   }
 

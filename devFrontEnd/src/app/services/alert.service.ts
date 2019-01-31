@@ -5,6 +5,7 @@ import { AlertObject } from '../interfaces/interfaces-list';
 
 @Injectable()
 export class AlertService {
+
   alertSubscription$: Observable<any>;
   private alertSubject = new Subject<any>();
 

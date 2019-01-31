@@ -1,53 +1,67 @@
 <div class="wrapper">
+
   <header class="header bg-primary">
+
     <button class="btn sidebar-toggler" type="button" (click)="toggleSidebar()">
       <fa-icon class="fa-icon" [icon]="burgerIcon"></fa-icon>
     </button>
+
     <div class="header-content">
       <a routerLink="/home" class="btn header-brand">
         <img src="../../assets/img/logo.png" alt="Logo" class="header-logo">
         Test System
       </a>
     </div>
+
   </header>
+
   <nav class="sidebar-wrapper bg-primary" [class.visible]="sidebarVisible">
     <ul class="sidebar-nav">
+
       <li class="sidebar-block">
         <div class="account-info">
           <img src="../../assets/img/user-icon-128.png" class="user-icon" alt="User icon">
           <div class="nickname">Mark Fidel</div>
         </div>
       </li>
+
       <li class="sidebar-block" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-        <a routerLink="/home" class="sidebar-link">
+        <a routerLink="/home" class="sidebar-link" menuLink>
           <fa-icon class="fa-icon" [icon]="homeIcon"></fa-icon>
           Home
         </a>
       </li>
+
       <li class="sidebar-block" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-        <a routerLink="/home/surveys-list" class="sidebar-link">
+        <a routerLink="/home/surveys-list" class="sidebar-link" menuLink>
           <fa-icon class="fa-icon" [icon]="completedSurveyIcon"></fa-icon>
           Surveys list
         </a>
       </li>
+
       <li class="sidebar-block" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-        <a routerLink="#" class="sidebar-link">
+        <a routerLink="#" class="sidebar-link" menuLink>
           <fa-icon class="fa-icon" [icon]="newSurveyIcon"></fa-icon>
           New survey
         </a>
       </li>
+
       <li class="sidebar-block">
         <hr class="separator">
       </li>
+
       <li class="sidebar-block" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-        <a routerLink="" class="sidebar-link">
+        <a routerLink="/" class="sidebar-link" menuLink>
           <fa-icon class="fa-icon" [icon]="logoutIcon"></fa-icon>
           Logout
         </a>
       </li>
+
     </ul>
   </nav>
+
   <main class="content-wrapper" [class.fix-main-content]="sidebarVisible">
     <router-outlet></router-outlet>
   </main>
+
 </div>

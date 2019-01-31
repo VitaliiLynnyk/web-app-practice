@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class SurveysService {
+
+  private idSurvey: number;
 
   constructor(private http: HttpClient) { }
 
@@ -17,4 +19,21 @@ export class SurveysService {
       );
   }
 
+  getSurveyInfo() {
+    const params = new HttpParams().set('survey_id', this.idSurvey.toString());
+    return this.http.get(
+      'https://web-app-practice.herokuapp.com/api/questionPersonAnswers',
+      {
+        headers: SurveysService.createHeaderToken(),
+        params: params}
+      );
+  }
+
+  setIdSurvey(temp: number) {
+    this.idSurvey = temp;
+  }
+
+  getIdSurvey() {
+    return this.idSurvey;
+  }
 }

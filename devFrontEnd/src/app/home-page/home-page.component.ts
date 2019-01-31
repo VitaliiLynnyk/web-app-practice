@@ -1,13 +1,18 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, Directive, HostListener } from '@angular/core';
 import { faHome, faFileAlt, faPollH, faSignOutAlt, faBars } from '@fortawesome/free-solid-svg-icons';
 
-import { AlertService } from '../services/alert.service';
+/*
+@Directive({
+  selector: '[appMenuLink]'
+})
+*/
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss']
 })
+
 export class HomePageComponent implements OnChanges, OnInit {
 
   sidebarVisible = false;
@@ -17,14 +22,20 @@ export class HomePageComponent implements OnChanges, OnInit {
   newSurveyIcon = faPollH;
   logoutIcon = faSignOutAlt;
 
-  constructor(private alertService: AlertService) {
+  constructor() {  }
+
+/*
+  @HostListener('click') chooseMenuLink() {
+    if (window.screen.availWidth >= 767) {
+      this.sidebarVisible = false;
+    }
   }
+*/
 
   ngOnChanges() {
   }
 
   ngOnInit() {
-    // this.alertService.alertSetSubject('It is test alert!', 'danger', 401, 100000);
   }
 
   toggleSidebar() {
@@ -32,7 +43,4 @@ export class HomePageComponent implements OnChanges, OnInit {
   }
 
 
-
 }
-
-

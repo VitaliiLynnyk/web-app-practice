@@ -1,4 +1,5 @@
 <p class="alert-container">
-  <ngb-alert class="alert-visible" [dismissible]="false" *ngIf="showingAlert"
-             [type]="typeMessage" (click)="closeAlert()">{{ alertMessage }}</ngb-alert>
+  <ngb-alert class="alert-visible" [dismissible]="false" [type]="typeMessage" *ngIf="showingAlert" (click)="closeAlert()">
+    {{ alertMessage }}
+  </ngb-alert>
 </p>

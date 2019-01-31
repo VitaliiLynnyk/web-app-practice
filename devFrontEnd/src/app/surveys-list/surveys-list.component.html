@@ -2,8 +2,11 @@
   <div class="col-12 mb-3">
     <div class="card">
       <div class="card-body">
+
         <table class="table table-bordered table-hover">
+
           <thead>
+
           <tr>
             <th scope="col">ID</th>
             <th scope="col">First Name</th>
@@ -11,8 +14,11 @@
             <th scope="col">Description</th>
             <th scope="col">Show info</th>
           </tr>
+
           </thead>
+
           <tbody>
+
           <tr *ngFor="let survey of surveysArray">
             <td scope="row">{{ survey.survey_id }}</td>
             <td>{{ survey.firstname }}</td>
@@ -22,14 +28,10 @@
               <button type="button" class="btn btn-raised btn-info btn-sm" (click)="showInfo(survey.survey_id)">Show</button>
             </td>
           </tr>
+
           </tbody>
+
         </table>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 mb-3">
-    <div class="card">
-      <div class="card-body">
 
       </div>
     </div>

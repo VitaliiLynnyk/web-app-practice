@@ -123,10 +123,6 @@ $height-header: 60px;
     transition-duration: 1s;
     transition-delay: 0s;
     transition-timing-function: ease;
-
-
-
-
   }
 
   .visible {
@@ -137,10 +133,6 @@ $height-header: 60px;
     left: 0;
     width: 100%;
   }
-
-
-
-
 
   @media screen and (max-width: 768px) {
     .sidebar-wrapper {
@@ -161,4 +153,3 @@ $height-header: 60px;
 .active {
   background-color: #00B4A3;
 }
-
