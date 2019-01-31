@@ -4,9 +4,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class AuthService {
 
-  customHeaders = new HttpHeaders().set('token', localStorage.getItem('tokenSession'));
-
   constructor(private http: HttpClient) {
+  }
+
+  static createHeaderToken () {
+    return new HttpHeaders().set('token', localStorage.getItem('tokenSession'));
   }
 
   postLogIn(loginData) {
@@ -21,7 +23,7 @@ export class AuthService {
     return this.http.post(
       'https://web-app-practice.herokuapp.com/api/logOut',
       {},
-      {headers: this.customHeaders}
+      {headers: AuthService.createHeaderToken()}
       );
   }
 
@@ -29,12 +31,7 @@ export class AuthService {
     return this.http.post(
       'https://web-app-practice.herokuapp.com/api/authentication',
       {},
-      {headers: this.customHeaders}
+      {headers: AuthService.createHeaderToken()}
       );
   }
-
-
 }
-
-
-

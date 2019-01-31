@@ -1,8 +1,3 @@
-export interface User {
-  email: string;
-  password: string;
-}
-
 export interface ResponseMessage {
   status?: number;
   message: string;
@@ -24,15 +19,10 @@ export interface AlertObject {
   timeAlert: number;
 }
 
-export interface UserReg {
+export interface SurveyInfo {
+  description: string;
   firstname: string;
   lastname: string;
-  email: string;
-  password: string;
+  survey_id: number;
 }
 
-export interface TestRes {
-  id: number;
-  person_id: number;
-  token: string;
-}

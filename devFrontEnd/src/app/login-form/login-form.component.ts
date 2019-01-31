@@ -55,14 +55,14 @@ export class LoginFormComponent implements OnInit {
     }
   }
 
-  validateEmailField(e) {
-    e === '' ?
+  validateEmailField(event) {
+    event === '' ?
       this.errorMessageEmail = 'Please provide a email.'
       : this.errorMessageEmail = 'Please provide a valid email.';
   }
 
-  validatePasswordField(e) {
-    if (e === '') { this.errorMessagePassword = 'Please provide a password.'; }
+  validatePasswordField(event) {
+    if (event === '') { this.errorMessagePassword = 'Please provide a password.'; }
   }
 
   onSubmit() {
@@ -80,7 +80,4 @@ export class LoginFormComponent implements OnInit {
         }
       );
   }
-
-
-
 }

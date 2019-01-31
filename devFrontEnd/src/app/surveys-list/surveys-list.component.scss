@@ -1,0 +1,33 @@
+.container-fluid {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.table {
+
+  thead {
+
+    th {
+      font-weight: bold;
+
+      &:first-child, &:last-child {
+        text-align: center;
+      }
+    }
+  }
+
+  tbody {
+
+    td {
+      vertical-align: middle;
+
+      &:first-child, &:last-child {
+        text-align: center;
+      }
+
+      &:first-child {
+        font-weight: bold;
+      }
+    }
+  }
+}

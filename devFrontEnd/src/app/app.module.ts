@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http';
+import { NgHttpLoaderModule } from 'ng-http-loader';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -13,13 +14,14 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AlertCloseableComponent } from './alert-closeable/alert-closeable.component';
+import { HomeContentComponent } from './home-content/home-content.component';
+import { SurveysListComponent } from './surveys-list/surveys-list.component';
 
 import { AuthService } from './services/auth.service';
 import { AlertService } from './services/alert.service';
+import { SurveysService } from './services/surveys.service';
 
 import { AuthGuard } from './guards/auth.guard';
-import { HomeContentComponent } from './home-content/home-content.component';
-import { CompletedSurveysComponent } from './completed-surveys/completed-surveys.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,7 @@ import { CompletedSurveysComponent } from './completed-surveys/completed-surveys
     NotFoundComponent,
     AlertCloseableComponent,
     HomeContentComponent,
-    CompletedSurveysComponent
+    SurveysListComponent
   ],
   imports: [
     BrowserModule,
@@ -38,12 +40,14 @@ import { CompletedSurveysComponent } from './completed-surveys/completed-surveys
     FontAwesomeModule,
     FormsModule,
     HttpClientModule,
+    NgHttpLoaderModule.forRoot(),
     ReactiveFormsModule
   ],
   providers: [
     AuthService,
     AuthGuard,
-    AlertService
+    AlertService,
+    SurveysService
   ],
   bootstrap: [AppComponent]
 })

@@ -13,7 +13,7 @@ export class AlertService {
   }
 
   alertSetSubject(data: string, type: string, status?: number, time?: number) {
-    if (status === 0) { data = 'No internet connection.'; }
+    if (status === 0) { data = 'No internet connection or server error.'; }
     const temp: AlertObject = {
       messageAlert: data,
       typeAlert: type,
@@ -21,5 +21,4 @@ export class AlertService {
     };
     this.alertSubject.next(temp);
   }
-
 }
