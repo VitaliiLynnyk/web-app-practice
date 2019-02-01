@@ -8,6 +8,21 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
     <changeSet author="vitalii" id="loadData">
         <loadData encoding="UTF-8"
+                  file="./module/liquibase/resources/files/statusData.csv"
+                  tableName="status">
+            <column name="description" type="string"/>
+        </loadData>
+        <loadData encoding="UTF-8"
+                  file="./module/liquibase/resources/files/topicData.csv"
+                  tableName="topic">
+            <column name="description" type="string"/>
+        </loadData>
+        <loadData encoding="UTF-8"
+                  file="./module/liquibase/resources/files/degreeData.csv"
+                  tableName="degree">
+            <column name="description" type="string"/>
+        </loadData>
+        <loadData encoding="UTF-8"
                   file="./module/liquibase/resources/files/questionData.csv"
                   tableName="question">
             <column name="question" type="string"/>

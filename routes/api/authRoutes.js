@@ -57,7 +57,7 @@ router.post("/logOut", checkAuthentication(false), (req, res, next) => {
     `delete from Person_Token where token=$1`,
     [req.headers.token],
     (error, results) => {
-      if (error) {
+        if (error) {
         return res.status(500).json({ message: "Server Error" });
       }
       let user = req.decoded;
@@ -67,6 +67,27 @@ router.post("/logOut", checkAuthentication(false), (req, res, next) => {
         .json({ message: `${user.firstname} ${user.lastname} is logOut` });
     }
   );
+});
+
+router.post("/authentication", (req, res, next) => {
+    if (req.headers.token) {
+        pool.query(
+            `select * from Person_Token where token=$1`,
+            [req.headers.token],
+            (err, data) => {
+                if (err) {
+                    return res.status(500).json({ message: "Server Error" });
+                }
+                if (data.rows[0]) {
+                    return res.status(200).json({ message: "" });
+                } else {
+                    return res.status(401).json({ message: "" });
+                }
+            }
+        );
+    } else {
+        return res.status(401).json({ message: false });
+    }
 });
 
 module.exports = router;

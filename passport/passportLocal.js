@@ -52,7 +52,7 @@ passport.use(
         req.body.is_admin
       ) {
         pool.query(
-          `select * from Person where email=$1`,
+          `select * from PERSON where email=$1`,
           [email],
           (err, res) => {
             if (err) {
@@ -64,7 +64,7 @@ passport.use(
               return done(null, err);
             } else {
               pool.query(
-                `insert into Person (firstname,lastname,email,hash,is_admin) values ($1, $2, $3, $4, $5)`,
+                `insert into PERSON (firstname,lastname,email,hash,is_admin) values ($1, $2, $3, $4, $5)`,
                 [
                   req.body.firstname,
                   req.body.lastname,
@@ -114,7 +114,7 @@ const checkAuthentication = isAdmin => (req, res, next) => {
   let token = req.headers.token;
   if (token) {
     pool.query(
-      `select * from Person_Token where token=$1`,
+      `select * from PERSON_TOKEN where token=$1`,
       [token],
       (err, result) => {
         if (err) {
@@ -128,7 +128,7 @@ const checkAuthentication = isAdmin => (req, res, next) => {
                 .json({ message: "You are not authorized" });
             } else {
               if (isAdmin) {
-                if (decoded.isAdmin) {
+                if (decoded.is_admin) {
                   req.decoded = decoded;
                   next();
                 } else {

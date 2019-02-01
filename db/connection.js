@@ -5,8 +5,7 @@ exports.pool = (user, host, database, password, port) => {
     host: host,
     database: database,
     password: password,
-    port: port,
-    ssl: true
+    port: port
   });
 
   pool.on("connect", () => {
