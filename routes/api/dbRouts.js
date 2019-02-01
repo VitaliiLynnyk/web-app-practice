@@ -48,8 +48,9 @@ router.get("/personsList", checkAuthentication(true), (req, res, next) => {
 
 router.get("/surveys", checkAuthentication(false), (req, res, next) => {
   pool.query(
-    `select Survey.id as survey_id, Survey.description, Person.firstname, Person.lastname from Person
-     inner join Survey on Person.id = Survey.person_id
+    `select Survey.id as survey_id, Survey.description, Person.firstname, Person.lastname, status.description as status from Survey
+     inner join Person on Survey.person_id = Person.id
+     inner join Status on Survey.status_id = Status.id
     `,
     (err, data) => {
       if (err) {
@@ -213,7 +214,29 @@ router.get(
               .status(404)
               .json({ message: "Persons Questions list is Empty" });
           }
-          res.status(200).send(data.rows);
+
+            const formatedQuestionAnswersArray = data.rows.reduce(
+                (acc, current) => {
+                    const answers = acc[current.question] || [];
+                    return {
+                        ...acc,
+                        [current.question]: [
+                            ...answers,
+                            { answer: current.answer,is_right: current.is_right }
+                        ]
+                    };
+                },
+                {}
+            );
+            let resArray = [];
+            for (let question in formatedQuestionAnswersArray) {
+                resArray.push({
+                    question: question,
+                    answers: formatedQuestionAnswersArray[question]
+                });
+            }
+
+          res.status(200).send(resArray);
         }
       );
     } else {
