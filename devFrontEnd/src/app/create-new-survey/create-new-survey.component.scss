@@ -1,6 +1,46 @@
+$errorColor: #F44336;
+$successColor: #4CAF50;
+
 .container-fluid {
     padding-top: 15px;
     padding-bottom: 15px;
+
+    input, select {
+
+        &:focus {
+            background-image:
+                linear-gradient(0deg, #3F51B5 2px, rgba(63, 81, 181, 0) 0),
+                linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0);
+        }
+
+        &.ng-touched.ng-invalid {
+            border-color: $errorColor;
+
+            &:focus {
+                box-shadow: 0 0 0 0.2rem rgba(244, 67, 54, .25);
+                border-color: $errorColor;
+                background-image:
+                    linear-gradient(0deg, #D50000 2px, rgba(213, 0, 0, 0) 0),
+                    linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0);
+            }
+        }
+
+        &.ng-touched.ng-valid {
+            border-color: $successColor;
+
+            &:focus {
+                box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, .25);
+                border-color: $successColor;
+                background-image:
+                    linear-gradient(0deg, #009688 2px, rgba(0, 150, 136, 0) 0),
+                    linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0);
+            }
+        }
+    }
+
+    .form-text.alert {
+        padding: .25rem .5rem;
+    }
 
     @media screen and (max-width: 540px) {
         .w-sm-100 {

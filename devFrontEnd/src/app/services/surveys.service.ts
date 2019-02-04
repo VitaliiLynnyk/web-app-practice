@@ -31,6 +31,13 @@ export class SurveysService {
         );
     }
 
+    getSurveyDegrees() {
+        return this.http.get(
+            'https://web-app-practice.herokuapp.com/api/getDegrees',
+            {headers: SurveysService.createHeaderToken()}
+        );
+    }
+
     setIdSurvey(temp: number) {
         this.idSurvey = temp;
     }

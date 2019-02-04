@@ -11,8 +11,7 @@ import {AppRoutingModule} from './app-routing.module';
 
 import {AppComponent} from './app.component';
 import {LoginFormComponent} from './login-form/login-form.component';
-import {HomePageComponent} from './home-page/home-page.component';
-// import {HomePageDirective} from './home-page/home-page.component';
+import {AppWrapperComponent} from './app-wrapper/app-wrapper.component';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {AlertCloseableComponent} from './alert-closeable/alert-closeable.component';
 import {HomeContentComponent} from './home-content/home-content.component';
@@ -20,6 +19,7 @@ import {SurveysListComponent} from './surveys-list/surveys-list.component';
 import {CompletedSurveyInfoComponent} from './completed-survey-info/completed-survey-info.component';
 import {SurveyAnswerItemComponent} from './survey-answer-item/survey-answer-item.component';
 import {CreateNewSurveyComponent} from './create-new-survey/create-new-survey.component';
+import {SidebarMenuItemComponent} from './sidebar-menu-item/sidebar-menu-item.component';
 
 import {AuthService} from './services/auth.service';
 import {AlertService} from './services/alert.service';
@@ -32,15 +32,15 @@ import {AuthGuard} from './guards/auth.guard';
     declarations: [
         AppComponent,
         LoginFormComponent,
-        HomePageComponent,
-        // HomePageDirective,
+        AppWrapperComponent,
         NotFoundComponent,
         AlertCloseableComponent,
         HomeContentComponent,
         SurveysListComponent,
         CompletedSurveyInfoComponent,
         SurveyAnswerItemComponent,
-        CreateNewSurveyComponent
+        CreateNewSurveyComponent,
+        SidebarMenuItemComponent
     ],
     imports: [
         BrowserModule,

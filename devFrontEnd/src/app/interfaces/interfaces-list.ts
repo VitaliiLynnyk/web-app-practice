@@ -11,6 +11,7 @@ export interface ServerResponseError {
 export interface ServerResponseOk {
     status: number;
     token: string;
+    username: string;
 }
 
 export interface AlertObject {
@@ -34,4 +35,9 @@ export interface SurveyInfo {
 export interface SurveyInfoAnswerItem {
     is_right: boolean;
     answer: string;
+}
+
+export interface SurveysDegreesItem {
+    id: number;
+    description: string;
 }

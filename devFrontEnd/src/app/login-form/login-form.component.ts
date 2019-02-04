@@ -44,6 +44,7 @@ export class LoginFormComponent implements OnInit {
                 .subscribe(
                     (data: ResponseMessage) => {
                         localStorage.removeItem('tokenSession');
+                        localStorage.removeItem('userName');
                         this.alertService.alertSetSubject(data.message, 'warning');
                     },
                     (error: ServerResponseError) => {
@@ -55,16 +56,14 @@ export class LoginFormComponent implements OnInit {
         }
     }
 
-    validateEmailField(event) {
-        event === '' ?
+    validateEmailField(value) {
+        value === '' ?
             this.errorMessageEmail = 'Please provide a email.'
             : this.errorMessageEmail = 'Please provide a valid email.';
     }
 
-    validatePasswordField(event) {
-        if (event === '') {
-            this.errorMessagePassword = 'Please provide a password.';
-        }
+    validatePasswordField(value) {
+        if (value === '') { this.errorMessagePassword = 'Please provide a password.'; }
     }
 
     onSubmit() {
@@ -72,6 +71,7 @@ export class LoginFormComponent implements OnInit {
             .subscribe(
                 (data: ServerResponseOk) => {
                     localStorage.setItem('tokenSession', data.token);
+                    localStorage.setItem('userName', data.username);
                     this.loginForm.reset();
                     this.router.navigate(['home']);
                     this.alertService.alertSetSubject(null, null);

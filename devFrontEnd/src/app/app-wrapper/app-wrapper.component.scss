@@ -8,7 +8,7 @@ $height-header: 60px;
     .header {
         height: $height-header;
         position: fixed;
-        z-index: 2;
+        z-index: 4;
         top: 0;
         left: 0;
         right: 0;
@@ -52,24 +52,33 @@ $height-header: 60px;
 
     .sidebar-wrapper {
         position: fixed;
-        z-index: 1;
+        z-index: 2;
         top: $height-header;
+        left: 0;
         height: 100%;
         overflow: hidden;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 0 0 rgba(0, 0, 0, .12);
         width: $width-sidebar;
         transition-property: width;
         transition-duration: 1s;
         transition-delay: 0s;
         transition-timing-function: ease;
+        background-color: rgba(0,0,0,0.5);
 
         .sidebar-nav {
             width: $width-sidebar;
+            height: 100%;
+            position: relative;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 0 0 rgba(0, 0, 0, .12);
             list-style: none;
             margin: 0;
             padding: 0;
+            z-index: 3;
 
             .sidebar-block {
+
+                &.active {
+                    background-color: #00B4A3;
+                }
 
                 .account-info {
                     width: 100%;
@@ -111,11 +120,13 @@ $height-header: 60px;
                     }
                 }
             }
+
         }
     }
 
     .content-wrapper {
         position: relative;
+        z-index: 1;
         top: $height-header;
         left: 250px;
         width: calc(100% - 250px);
@@ -137,19 +148,23 @@ $height-header: 60px;
     @media screen and (max-width: 768px) {
         .sidebar-wrapper {
             width: 0;
+
+            &.visible {
+                width: 100%;
+
+                & .sidebar-nav {
+                    width: 0;
+
+                    &.visible{
+                        width: $width-sidebar;
+                    }
+                }
+            }
         }
 
         .content-wrapper {
             left: 0;
             width: 100%;
         }
-
-        .visible {
-            width: $width-sidebar;
-        }
     }
-}
-
-.active {
-    background-color: #00B4A3;
 }

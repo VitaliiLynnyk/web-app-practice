@@ -12,7 +12,12 @@ export class UsersService {
     }
 
     getUserList() {
-
+        return this.http.get(
+            'https://web-app-practice.herokuapp.com/api/personsList',
+            {
+                headers: UsersService.createHeaderToken()
+            }
+        );
     }
 }
 

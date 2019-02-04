@@ -3,19 +3,23 @@
         <div class="card">
             <h5 class="card-header">Create new survey</h5>
             <div class="card-body">
-                <form>
+                <form [formGroup]="createSurveyForm" novalidate (ngSubmit)="onSubmit()">
                     <div class="bmd-form-group">
                         <label for="selectUser" class="bmd-label-floating">Select employee</label>
-                        <input type="text" class="form-control" id="selectUser">
+                        <input type="text" class="form-control" id="selectUser" formControlName="employeeName">
+                        <small class="form-text alert alert-danger"
+                               *ngIf="createSurveyForm.controls['employeeName'].invalid && createSurveyForm.controls['employeeName'].touched">
+                            Please select a employee.
+                        </small>
                     </div>
                     <div class="form-group">
-                        <label for="selectDegrees">State</label>
-                        <select id="selectDegrees" class="form-control">
-                            <option selected>Choose...</option>
-                            <option>...</option>
+                        <label for="selectDegrees" class="bmd-label-floating">Select degree survey</label>
+                        <select id="selectDegrees" class="form-control" formControlName="surveyDegree">
+                            <option *ngFor="let item of degreesList" value="{{ item.id }}">{{ item.description }}</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-raised w-sm-100">Create survey</button>
+                    <button type="submit" class="btn btn-primary btn-raised w-sm-100"
+                            [disabled]="!createSurveyForm.valid">Create survey</button>
                 </form>
             </div>
         </div>
