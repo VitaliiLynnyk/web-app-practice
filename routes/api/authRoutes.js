@@ -31,7 +31,7 @@ router.post("/signIn", (req, res, next) => {
               return res.status(500).json({ message: "Server Error" });
             }
             if (results.rows.length) {
-              res.status(200).json({ token: token, "username": user.firstname });
+              res.status(200).json({ token: token, username: user.firstname });
             } else {
               res.status(500).json({ message: "Server Error" });
             }
