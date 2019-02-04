@@ -24,14 +24,14 @@ router.post("/signIn", (req, res, next) => {
           return res.status(500).json({ message: "Server Error" });
         }
         pool.query(
-          `insert into Person_Token (person_id, token) values ($1, $2)`,
+          `insert into Person_Token (person_id, token) values ($1, $2) returning id`,
           [user.id, token],
           (error, results) => {
             if (error) {
               return res.status(500).json({ message: "Server Error" });
             }
-            if (results.rows) {
-              res.status(200).json({ token: token });
+            if (results.rows.length) {
+              res.status(200).json({ token: token, "username": user.firstname });
             } else {
               res.status(500).json({ message: "Server Error" });
             }
