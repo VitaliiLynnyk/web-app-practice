@@ -4,8 +4,6 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 @Injectable()
 export class SurveysService {
 
-    private idSurvey: number;
-
     constructor(private http: HttpClient) {
     }
 
@@ -20,13 +18,13 @@ export class SurveysService {
         );
     }
 
-    getSurveyInfo() {
-        const params = new HttpParams().set('survey_id', this.idSurvey.toString());
+    getSurveyInfo(idSurvey) {
+        const parameters = new HttpParams().set('survey_id', idSurvey.toString());
         return this.http.get(
             'https://web-app-practice.herokuapp.com/api/questionPersonAnswers',
             {
                 headers: SurveysService.createHeaderToken(),
-                params: params
+                params: parameters
             }
         );
     }
@@ -46,13 +44,5 @@ export class SurveysService {
                 degree_id: createNewSurveyData.degreeId},
             {headers: SurveysService.createHeaderToken()}
         );
-    }
-
-    setIdSurvey(temp: number) {
-        this.idSurvey = temp;
-    }
-
-    getIdSurvey() {
-        return this.idSurvey;
     }
 }

@@ -33,8 +33,7 @@ export class SurveysListComponent implements OnInit {
             );
     }
 
-    showInfo(temp: number) {
-        this.surveysService.setIdSurvey(temp);
-        this.router.navigate(['home/survey-info']);
+    showInfo(idSurvey: number) {
+        this.router.navigate(['home/survey-info'], {queryParams: {id: idSurvey}});
     }
 }
