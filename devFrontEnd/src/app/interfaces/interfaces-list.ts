@@ -41,3 +41,11 @@ export interface SurveysDegreesItem {
     id: number;
     description: string;
 }
+
+export interface UserListItem {
+    id: number;
+    firstname: string;
+    lastname: string;
+    email: string;
+}
+

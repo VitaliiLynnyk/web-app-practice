@@ -1,26 +1,30 @@
-import {Component, OnChanges, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {debounceTime, map} from 'rxjs/operators';
 
 import {SurveysService} from '../services/surveys.service';
 import {UsersService} from '../services/users.service';
 import {AlertService} from '../services/alert.service';
 
-import {SurveysDegreesItem, ServerResponseError} from '../interfaces/interfaces-list';
+import {SurveysDegreesItem, ServerResponseError, UserListItem} from '../interfaces/interfaces-list';
 
 @Component({
     selector: 'app-create-new-survey',
     templateUrl: './create-new-survey.component.html',
     styleUrls: ['./create-new-survey.component.scss']
 })
-export class CreateNewSurveyComponent implements OnChanges, OnInit {
+export class CreateNewSurveyComponent implements OnInit {
 
     createSurveyForm: FormGroup = new FormGroup({
         employeeName: new FormControl('', [
             Validators.required,
+            CreateNewSurveyComponent.selectEmployeeValidator
         ]),
         surveyDegree: new FormControl('', [])
     });
 
+    userList: Array<UserListItem>;
     degreesList: Array<SurveysDegreesItem>;
 
     constructor(
@@ -29,17 +33,18 @@ export class CreateNewSurveyComponent implements OnChanges, OnInit {
         private alertService: AlertService) {
     }
 
-    ngOnChanges() {
+    static selectEmployeeValidator(control: FormControl): {[s: string]: boolean} {
+        return !control.value.id ? {'employeeName': true} : null;
     }
 
     ngOnInit() {
         this.userService.getUserList()
             .subscribe(
-                (data: any) => {
-                    console.log(data);
+                (data: Array<UserListItem>) => {
+                    this.userList = data;
                 },
-                (error: any) => {
-                    console.log(error);
+                (error: ServerResponseError) => {
+                    this.alertService.alertSetSubject(error.error.message, 'warning');
                 }
             );
         this.surveysService.getSurveyDegrees()
@@ -52,6 +57,22 @@ export class CreateNewSurveyComponent implements OnChanges, OnInit {
                     this.alertService.alertSetSubject(error.error.message, 'warning');
                 }
             );
+    }
+
+    searchEmployee = (text$: Observable<string>) => {
+        return text$.pipe(
+            debounceTime(200),
+            map(term => {
+                return term === '' ? []
+                    : this.userList.filter(item => {
+                        return item.firstname.toLowerCase().indexOf(term.toLowerCase()) > -1;
+                    }).slice(0, 10);
+            })
+        );
+    }
+
+    formatterResult(item: {firstname: string}) {
+        return item.firstname;
     }
 
     onSubmit() {
