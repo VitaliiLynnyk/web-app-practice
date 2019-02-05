@@ -38,6 +38,16 @@ export class SurveysService {
         );
     }
 
+    postCreateNewSurvey(createNewSurveyData: any) {
+        return this.http.post(
+            'https://web-app-practice.herokuapp.com/api/surveys',
+            {
+                person_id: createNewSurveyData.personId,
+                degree_id: createNewSurveyData.degreeId},
+            {headers: SurveysService.createHeaderToken()}
+        );
+    }
+
     setIdSurvey(temp: number) {
         this.idSurvey = temp;
     }

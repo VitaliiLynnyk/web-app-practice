@@ -14,7 +14,10 @@ export class AuthService {
     postLogIn(loginData: any) {
         return this.http.post(
             'https://web-app-practice.herokuapp.com/api/signIn',
-            {email: loginData.loginEmail, password: loginData.loginPassword}
+            {
+                email: loginData.loginEmail,
+                password: loginData.loginPassword
+            }
         );
     }
 

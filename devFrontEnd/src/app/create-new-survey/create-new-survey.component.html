@@ -1,35 +1,45 @@
 <section class="container-fluid">
+
     <div class="col-12 mb-3">
+
         <div class="card">
+
             <h5 class="card-header">Create new survey</h5>
+
             <div class="card-body">
                 <form [formGroup]="createSurveyForm" novalidate (ngSubmit)="onSubmit()">
+
                     <div class="bmd-form-group">
-                        <label for="selectEmployee" class="bmd-label-floating">Select employee</label>
+                        <label for="selectEmployee">Select employee</label>
                         <input type="text" class="form-control" id="selectEmployee" formControlName="employeeName"
                                [ngbTypeahead]="searchEmployee" [resultTemplate]="resultTemplate" [inputFormatter]="formatterResult">
 
                         <ng-template #resultTemplate let-r="result" let-t="term" class="result-template">
-                            <ngb-highlight [result]="r.firstname" [term]="t"></ngb-highlight>
-                            <span class="ml-1">{{ r.lastname }} | {{ r.email }}</span>
+                            <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+                            <span class="ml-1">| {{ r.email }}</span>
                         </ng-template>
 
                         <small class="form-text alert alert-danger"
                                *ngIf="createSurveyForm.controls['employeeName'].invalid && createSurveyForm.controls['employeeName'].touched">
                             Please select a employee.
                         </small>
-                        <pre>Model: {{ createSurveyForm.get('employeeName').value.id | json }}</pre>
                     </div>
+
                     <div class="form-group">
-                        <label for="selectDegrees" class="bmd-label-floating">Select degree survey</label>
+                        <label for="selectDegrees">Select degree survey</label>
                         <select id="selectDegrees" class="form-control" formControlName="surveyDegree">
                             <option *ngFor="let item of degreesList" value="{{ item.id }}">{{ item.description }}</option>
                         </select>
                     </div>
+
                     <button type="submit" class="btn btn-primary btn-raised w-sm-100"
                             [disabled]="!createSurveyForm.valid">Create survey</button>
+
                 </form>
             </div>
+
         </div>
+
     </div>
+
 </section>

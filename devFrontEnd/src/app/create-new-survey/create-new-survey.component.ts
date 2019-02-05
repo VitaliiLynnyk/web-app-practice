@@ -7,7 +7,7 @@ import {SurveysService} from '../services/surveys.service';
 import {UsersService} from '../services/users.service';
 import {AlertService} from '../services/alert.service';
 
-import {SurveysDegreesItem, ServerResponseError, UserListItem} from '../interfaces/interfaces-list';
+import {ResponseMessage, ServerResponseError, SurveysDegreesItem, UserListItem} from '../interfaces/interfaces-list';
 
 @Component({
     selector: 'app-create-new-survey',
@@ -65,18 +65,29 @@ export class CreateNewSurveyComponent implements OnInit {
             map(term => {
                 return term === '' ? []
                     : this.userList.filter(item => {
-                        return item.firstname.toLowerCase().indexOf(term.toLowerCase()) > -1;
+                        return item.name.toLowerCase().indexOf(term.toLowerCase()) > -1;
                     }).slice(0, 10);
             })
         );
     }
 
-    formatterResult(item: {firstname: string}) {
-        return item.firstname;
+    formatterResult(item: {name: string}) {
+        return item.name;
     }
 
     onSubmit() {
-
+        const formData = {
+            personId: this.createSurveyForm.get('employeeName').value.id,
+            degreeId: this.createSurveyForm.get('surveyDegree').value
+        };
+        this.surveysService.postCreateNewSurvey(formData)
+            .subscribe(
+                (data: ResponseMessage) => {
+                    this.alertService.alertSetSubject(data.message, 'success');
+                },
+                (error: ServerResponseError) => {
+                    this.alertService.alertSetSubject(error.error.message, 'warning');
+                }
+            );
     }
-
 }

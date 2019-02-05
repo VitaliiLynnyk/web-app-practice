@@ -48,25 +48,3 @@ $successColor: #4CAF50;
         }
     }
 }
-
-ngb-typeahead-window.dropdown-menu .dropdown-item.active,
-ngb-typeahead-window.dropdown-menu .dropdown-item:active {
-    color: #FFFFFF;
-    text-decoration: none;
-    background-color: #009688;
-}
-
-/*
-.dropdown-menu {
-
-    & .dropdown-item {
-
-        &.active,
-        &:active {
-            color: #FFFFFF;
-            text-decoration: none;
-            background-color: #009688;
-        }
-    }
-}
-*/
