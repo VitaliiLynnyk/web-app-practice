@@ -121,6 +121,7 @@ router.post("/surveys", checkAuthentication(false), (req, res, next) => {
                   let random_url = bcrypt.hashSync(
                     `${surveysStat.rows[0].id} ${Date.now()}`
                   );
+				  random_url.replace("$","");
                   pool.query(
                     `insert into TEMPORARY_SURVEYS (survey_id, random_url, time) values ($1,$2,$3) returning random_url`,
                     [req.body.person_id, random_url, null],
@@ -130,7 +131,7 @@ router.post("/surveys", checkAuthentication(false), (req, res, next) => {
                           .status(401)
                           .json({ message: "Server Error" });
                       }
-                      res.status(200).send(temporaryData.rows[0].random_url);
+                      res.status(200).json({random_url:temporaryData.rows[0].random_url,survey_id: surveysStat.rows[0].id });
                     }
                   );
                 });
