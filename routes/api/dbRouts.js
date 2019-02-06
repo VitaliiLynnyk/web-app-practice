@@ -42,7 +42,8 @@ router.get("/personsList", checkAuthentication(true), (req, res, next) => {
       } else if (!data.rows.length) {
         return res.status(404).json({ message: "Persons list is Empty" });
       }
-      res.status(200).send(data.rows);
+      let formatedData = data.rows.map(e=> ({id:e.id, name:`${e.firstname} ${e.lastname}`, email:e.email})) 
+      res.status(200).send(formatedData);
     }
   );
 });
