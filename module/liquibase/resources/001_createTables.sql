@@ -58,3 +58,9 @@ create table PERSON_TOKEN(
 id SERIAL Primary Key,
 person_id integer REFERENCES PERSON(id),
 token TEXT NOT NULL);
+
+create table TEMPORARY_SURVEYS(
+id SERIAL Primary Key,
+survey_id integer REFERENCES SURVEY(id),
+random_url TEXT NOT NULL,
+time TIMESTAMP);

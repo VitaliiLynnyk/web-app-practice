@@ -1,4 +1,5 @@
 const router = require("express").Router();
+let bcrypt = require("bcrypt-nodejs");
 let checkAuthentication = require("../../passport/passportLocal")
   .checkAuthentication;
 
@@ -116,7 +117,21 @@ router.post("/surveys", checkAuthentication(false), (req, res, next) => {
                     });
                   });
 
-                  res.status(200).json({ message: "Survey created" });
+                  let random_url = bcrypt.hashSync(
+                    `${surveysStat.rows[0].id} ${Date.now()}`
+                  );
+                  pool.query(
+                    `insert into TEMPORARY_SURVEYS (survey_id, random_url, time) values ($1,$2,$3) returning random_url`,
+                    [req.body.person_id, random_url, null],
+                    (err, temporaryData) => {
+                      if (err) {
+                        return res
+                          .status(401)
+                          .json({ message: "Server Error" });
+                      }
+                      res.status(200).send(temporaryData.rows[0].random_url);
+                    }
+                  );
                 });
               }
             );
@@ -130,54 +145,115 @@ router.post("/surveys", checkAuthentication(false), (req, res, next) => {
 });
 
 router.get("/surveyQuestions", (req, res, next) => {
-  if (req.query.survey_id) {
+  if (req.query.random_url) {
     pool.query(
-      `select * from question_person_answers where survey_id=$1`,
-      [req.query.survey_id],
-      (err, result) => {
-        if (err) {
+      `select * from TEMPORARY_SURVEYS where random_url=$1`,
+      [req.query.random_url],
+      (err, tempData) => {
+        if (err || !tempData.rows.length) {
           return res.status(401).json({ message: "Server Error" });
         }
-        if (!result.rows.length) {
-          pool.query(
-            `
-             select question_answers.id, question.question, question_answers.answer
-                from survey_questions
-                    inner join question on survey_questions.question_id = question.id
-                    inner join question_answers on question.id = question_answers.question_id
-                    where survey_questions.survey_id=$1
-             `,
-            [req.query.survey_id],
-            (err, data) => {
-              if (err) {
-                return res.status(401).json({ message: "Server Error" });
-              }
-              const formatedQuestionAnswersArray = data.rows.reduce(
-                (acc, current) => {
-                  const answers = acc[current.question] || [];
-                  return {
-                    ...acc,
-                    [current.question]: [
-                      ...answers,
-                      { id: current.id, answer: current.answer }
-                    ]
-                  };
-                },
-                {}
-              );
-              let resArray = [];
-              for (let question in formatedQuestionAnswersArray) {
-                resArray.push({
-                  question: question,
-                  answers: formatedQuestionAnswersArray[question]
-                });
-              }
-              res.status(200).send(resArray);
+
+        pool.query(
+          `select * from Survey where id=$1`,
+          [tempData.rows[0].survey_id],
+          (err, surveyData) => {
+            if (err || !surveyData.rows.length) {
+              return res.status(401).json({ message: "Server Error" });
+            } else if (surveyData.rows[0].status_id == 3) {
+              return res.status(401).json({ message: "Survey is complited" });
             }
-          );
-        } else {
-          return res.status(401).json({ message: "Server Error" });
-        }
+            if (surveyData.rows[0].status_id == 1) {
+              pool.query(
+                `update Survey set status_id=$1 where id=$2 returning id`,
+                [2, surveyData.rows[0].id],
+                (err, updateSurveyData) => {
+                  if (err || !updateSurveyData.rows.length) {
+                    return res.status(401).json({ message: "Server Error" });
+                  }
+
+                  ///// update with time !
+
+                  pool.query(
+                    `
+                           select question_answers.id, question.question, question_answers.answer
+                              from survey_questions
+                                  inner join question on survey_questions.question_id = question.id
+                                  inner join question_answers on question.id = question_answers.question_id
+                                  where survey_questions.survey_id=$1
+                           `,
+                    [surveyData.rows[0].status_id],
+                    (err, data) => {
+                      if (err) {
+                        return res
+                          .status(401)
+                          .json({ message: "Server Error" });
+                      }
+                      const formatedQuestionAnswersArray = data.rows.reduce(
+                        (acc, current) => {
+                          const answers = acc[current.question] || [];
+                          return {
+                            ...acc,
+                            [current.question]: [
+                              ...answers,
+                              { id: current.id, answer: current.answer }
+                            ]
+                          };
+                        },
+                        {}
+                      );
+                      let resArray = [];
+                      for (let question in formatedQuestionAnswersArray) {
+                        resArray.push({
+                          question: question,
+                          answers: formatedQuestionAnswersArray[question]
+                        });
+                      }
+                      res.status(200).send(resArray);
+                    }
+                  );
+                }
+              );
+            } else {
+              pool.query(
+                `
+                           select question_answers.id, question.question, question_answers.answer
+                              from survey_questions
+                                  inner join question on survey_questions.question_id = question.id
+                                  inner join question_answers on question.id = question_answers.question_id
+                                  where survey_questions.survey_id=$1
+                           `,
+                [surveyData.rows[0].status_id],
+                (err, data) => {
+                  if (err) {
+                    return res.status(401).json({ message: "Server Error" });
+                  }
+                  const formatedQuestionAnswersArray = data.rows.reduce(
+                    (acc, current) => {
+                      const answers = acc[current.question] || [];
+                      return {
+                        ...acc,
+                        [current.question]: [
+                          ...answers,
+                          { id: current.id, answer: current.answer }
+                        ]
+                      };
+                    },
+                    {}
+                  );
+                  let resArray = [];
+                  for (let question in formatedQuestionAnswersArray) {
+                    resArray.push({
+                      question: question,
+                      answers: formatedQuestionAnswersArray[question]
+                    });
+                  }
+                  res.status(200).send(resArray);
+                }
+              );
+            }
+          }
+        );
       }
     );
   } else {
@@ -215,26 +291,26 @@ router.get(
               .json({ message: "Persons Questions list is Empty" });
           }
 
-            const formatedQuestionAnswersArray = data.rows.reduce(
-                (acc, current) => {
-                    const answers = acc[current.question] || [];
-                    return {
-                        ...acc,
-                        [current.question]: [
-                            ...answers,
-                            { answer: current.answer,is_right: current.is_right }
-                        ]
-                    };
-                },
-                {}
-            );
-            let resArray = [];
-            for (let question in formatedQuestionAnswersArray) {
-                resArray.push({
-                    question: question,
-                    answers: formatedQuestionAnswersArray[question]
-                });
-            }
+          const formatedQuestionAnswersArray = data.rows.reduce(
+            (acc, current) => {
+              const answers = acc[current.question] || [];
+              return {
+                ...acc,
+                [current.question]: [
+                  ...answers,
+                  { answer: current.answer, is_right: current.is_right }
+                ]
+              };
+            },
+            {}
+          );
+          let resArray = [];
+          for (let question in formatedQuestionAnswersArray) {
+            resArray.push({
+              question: question,
+              answers: formatedQuestionAnswersArray[question]
+            });
+          }
 
           res.status(200).send(resArray);
         }
