@@ -42,7 +42,11 @@ router.get("/personsList", checkAuthentication(true), (req, res, next) => {
       } else if (!data.rows.length) {
         return res.status(404).json({ message: "Persons list is Empty" });
       }
-      let formatedData = data.rows.map(e=> ({id:e.id, name:`${e.firstname} ${e.lastname}`, email:e.email})) 
+      let formatedData = data.rows.map(e => ({
+        id: e.id,
+        name: `${e.firstname} ${e.lastname}`,
+        email: e.email
+      }));
       res.status(200).send(formatedData);
     }
   );
@@ -121,7 +125,7 @@ router.post("/surveys", checkAuthentication(false), (req, res, next) => {
                   let random_url = bcrypt.hashSync(
                     `${surveysStat.rows[0].id} ${Date.now()}`
                   );
-				  random_url.replace("$","");
+                  random_url.replace("$", "");
                   pool.query(
                     `insert into TEMPORARY_SURVEYS (survey_id, random_url, time) values ($1,$2,$3) returning random_url`,
                     [req.body.person_id, random_url, null],
@@ -131,8 +135,13 @@ router.post("/surveys", checkAuthentication(false), (req, res, next) => {
                           .status(401)
                           .json({ message: "Server Error" });
                       }
-                      
-                      res.status(200).json({random_url:temporaryData.rows[0].random_url,survey_id: surveysStat.rows[0].id });
+
+                      res
+                        .status(200)
+                        .json({
+                          random_url: temporaryData.rows[0].random_url,
+                          survey_id: surveysStat.rows[0].id
+                        });
                     }
                   );
                 });
@@ -328,21 +337,32 @@ router.post(
   "/questionPersonAnswers",
   checkAuthentication(false),
   (req, res, next) => {
-    if (req.body.survey_id && req.body.question_answers_id) {
-      pool.query(
-        `insert into question_person_answers (survey_id, question_answers_id,full_answer) values ($1,$2,$3)`,
-        [
-          req.body.survey_id,
-          req.body.question_answers_id,
-          req.body.full_answer
-        ],
-        (err, result) => {
-          if (err) {
-            return res.status(401).json({ message: "Server Error" });
+    if (req.body.answers && Array.isArray(req.body.answers)) {
+      req.body.answers.forEach(e => {
+        pool.query(
+          `insert into question_person_answers (survey_id, question_answers_id,full_answer) values ($1,$2,$3)`,
+          [e.surv_id, e.answer_id, e.full_answer],
+          (err, result) => {
+            if (err) {
+              return res.status(401).json({ message: "Server Error" });
+            }
           }
-          res.status(200).json({ message: "Done" });
-        }
-      );
+        );
+        pool.query(
+          `update Survey set status_id=$1 where id=$2 returning id`,
+          [3, req.body.answers[0].surv_id],
+          (err, result) => {
+            if (err) {
+              return res.status(401).json({ message: "Server Error" });
+            }
+            if (result.rows.length) {
+              return res.status(200).send("Done");
+            } else {
+              return res.status(401).json({ message: "Server Error" });
+            }
+          }
+        );
+      });
     } else {
       return res.status(401).json({ message: "Server Error" });
     }
