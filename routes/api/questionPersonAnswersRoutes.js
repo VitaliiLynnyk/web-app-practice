@@ -72,7 +72,7 @@ router.get(
 );
 
 router.post("/questionPersonAnswers", (req, res, next) => {
-    if (req.body.answers && Array.isArray(req.body.answers)) {
+    if (req.body.answers) {
         pool.query(
             `delete from TEMPORARY_SURVEYS where survey_id=$1 `,
             [req.body.answers[0].surv_id],

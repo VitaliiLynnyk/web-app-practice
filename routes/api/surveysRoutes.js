@@ -64,7 +64,7 @@ router.post("/surveys", checkAuthentication(false), (req, res, next) => {
                                                     el.topic_id === item.id
                                             )
                                             .sort(() => 0.5 - Math.random())
-                                            .slice(0, 6);
+                                            .slice(0, 5);
                                     });
                                     randomQuestions.forEach(questionsArr => {
                                         questionsArr.forEach(items => {
