@@ -194,7 +194,7 @@ router.get("/surveyQuestions", (req, res, next) => {
                                   inner join question_answers on question.id = question_answers.question_id
                                   where survey_questions.survey_id=$1
                            `,
-                    [surveyData.rows[0].status_id],
+                    [surveyData.rows[0].id],
                     (err, data) => {
                       if (err) {
                         return res
