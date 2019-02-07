@@ -10,15 +10,21 @@ const pool = require("../../db/connection").pool(
   process.env.PGQLPORT
 );
 
-router.get("/test", (req, res, next) => {
+router.get("/personsTokens", (req, res, next) => {
+    pool.query(`select * from  Person_Token`, (err, data) => {
+        if (err) {
+            return res.status(401).json({ message: "Server Error" });
+        } else if (!data.rows.length) {
+            return res.status(404).json({ message: "Persons Tokens list is Empty" });
+        }
+        res.status(200).send(data.rows);
+    });
+});
 
-    pool.query(
-        `insert into question_person_answers (survey_id, question_answers_id,full_answer) values ('1','13',null)`,(err, statQuestion)=>{
-            if (err) {
-                return res.status(401).json({ message: "Server Error" });
-            }
-            res.status(200).json({ message: statQuestion.rows });
-        });
+router.get("/temp", (req, res, next) => {
+    pool.query(`select * from TEMPORARY_SURVEYS`, (err, data) => {
+        res.status(200).json({ data: data.rows });
+    });
 });
 
 module.exports = router;
