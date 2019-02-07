@@ -348,7 +348,7 @@ router.post(
   (req, res, next) => {
     if (req.body.answers && Array.isArray(req.body.answers)) {
       pool.query(`select * from Survey where id=$1`,[req.body.answers[0].surv_id],(err, data)=>{
-          if(err || data.rows[0].status_id != 3){
+          if(err || data.rows[0].status_id == 3){
               return res.status(401).json({ message: "Server Error" });
           }
           req.body.answers.forEach(e => {
@@ -361,21 +361,21 @@ router.post(
                       }
                   }
               );
-              pool.query(
-                  `update Survey set status_id=$1 where id=$2 returning id`,
-                  [3, req.body.answers[0].surv_id],
-                  (err, result) => {
-                      if (err) {
-                          return res.status(401).json({ message: "Server Error" });
-                      }
-                      if (result.rows.length) {
-                          return res.status(200).send("Done");
-                      } else {
-                          return res.status(401).json({ message: "Server Error" });
-                      }
-                  }
-              );
           });
+          pool.query(
+              `update Survey set status_id=$1 where id=$2 returning id`,
+              [3, req.body.answers[0].surv_id],
+              (err, result) => {
+                  if (err) {
+                      return res.status(401).json({ message: "Server Error" });
+                  }
+                  if (result.rows.length) {
+                      return res.status(200).send("Done");
+                  } else {
+                      return res.status(401).json({ message: "Server Error" });
+                  }
+              }
+          );
       })
     } else {
       return res.status(401).json({ message: "Server Error" });
