@@ -21,7 +21,7 @@ router.get("/personsTokens", (req, res, next) => {
   });
 });
 
-router.get("/statistics",checkAuthentication(false), (req, res, next) => {
+router.get("/statistics", (req, res, next) => {
   pool.query(
     `
      select count(*) as allPersons from Person where is_admin=false;
@@ -32,21 +32,20 @@ router.get("/statistics",checkAuthentication(false), (req, res, next) => {
     (err, data) => {
       res
         .status(200)
-        .send([
-          ...data[0].rows.map(e => ({
-            type: "allPersons",
-            count: e.allpersons
-          })),
-          ...data[1].rows.map(e => ({
-            type: "allSurveys",
-            count: e.allsurveys
-          })),
-          ...data[2].rows.map(e => ({
-            type: "surveysByStatus",
-            status: e.description,
-            count: e.count
-          }))
-        ]);
+          .send([
+              ...data[0].rows.map(e => ({
+                  description: "Total persons",
+                  count: e.allpersons
+              })),
+              ...data[1].rows.map(e => ({
+                  description: "Total surveys",
+                  count: e.allsurveys
+              })),
+              ...data[2].rows.map(e => ({
+                  description: `Total surveys by status ${e.description}`,
+                  count: e.count
+              }))
+          ]);
     }
   );
 });
