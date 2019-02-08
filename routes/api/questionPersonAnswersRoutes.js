@@ -76,7 +76,7 @@ router.post("/questionPersonAnswers", (req, res, next) => {
         pool.query(
             `delete from TEMPORARY_SURVEYS where survey_id=$1 `,
             [req.body.answers[0].surv_id],
-            (err, res) => {
+            (err, result) => {
                 if (err) {
                     return res.status(401).json({ message: "Server Error" });
                 }

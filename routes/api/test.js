@@ -22,7 +22,7 @@ router.get("/personsTokens", (req, res, next) => {
 });
 
 router.get("/temp", (req, res, next) => {
-    pool.query(`select * from TEMPORARY_SURVEYS`, (err, data) => {
+    pool.query(`select * from survey_questions`, (err, data) => {
         res.status(200).json({ data: data.rows });
     });
 });
