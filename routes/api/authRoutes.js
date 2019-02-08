@@ -31,7 +31,12 @@ router.post("/signIn", (req, res, next) => {
               return res.status(500).json({ message: "Server Error" });
             }
             if (results.rows.length) {
-              res.status(200).json({ token: token, username: `${user.firstname} ${user.lastname}` });
+              res
+                .status(200)
+                .json({
+                  token: token,
+                  username: `${user.firstname} ${user.lastname}`
+                });
             } else {
               res.status(500).json({ message: "Server Error" });
             }
@@ -57,7 +62,7 @@ router.post("/logOut", checkAuthentication(false), (req, res, next) => {
     `delete from Person_Token where token=$1`,
     [req.headers.token],
     (error, results) => {
-        if (error) {
+      if (error) {
         return res.status(500).json({ message: "Server Error" });
       }
       let user = req.decoded;
@@ -70,24 +75,24 @@ router.post("/logOut", checkAuthentication(false), (req, res, next) => {
 });
 
 router.post("/authentication", (req, res, next) => {
-    if (req.headers.token) {
-        pool.query(
-            `select * from Person_Token where token=$1`,
-            [req.headers.token],
-            (err, data) => {
-                if (err) {
-                    return res.status(500).json({ message: "Server Error" });
-                }
-                if (data.rows[0]) {
-                    return res.status(200).json({ message: "" });
-                } else {
-                    return res.status(401).json({ message: "" });
-                }
-            }
-        );
-    } else {
-        return res.status(401).json({ message: false });
-    }
+  if (req.headers.token) {
+    pool.query(
+      `select * from Person_Token where token=$1`,
+      [req.headers.token],
+      (err, data) => {
+        if (err) {
+          return res.status(500).json({ message: "Server Error" });
+        }
+        if (data.rows[0]) {
+          return res.status(200).json({ message: "" });
+        } else {
+          return res.status(401).json({ message: "" });
+        }
+      }
+    );
+  } else {
+    return res.status(401).json({ message: false });
+  }
 });
 
 module.exports = router;

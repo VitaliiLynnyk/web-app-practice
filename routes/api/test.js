@@ -21,9 +21,14 @@ router.get("/personsTokens", (req, res, next) => {
     });
 });
 
-router.get("/temp", (req, res, next) => {
-    pool.query(`select * from survey_questions`, (err, data) => {
-        res.status(200).json({ data: data.rows });
+router.get("/statistics", (req, res, next) => {
+    pool.query(`
+     select count(*) as allPersons from Person where is_admin=false;
+     select count(*) as allSurveys from SURVEY;
+     select count(SURVEY.id),STATUS.description from STATUS
+     inner join SURVEY on SURVEY.status_id=status.id
+     group by STATUS.description`, (err, data) => {
+        res.status(200).json({ allPersons: data[0].rows,allSurveys: data[1].rows,surveysByStatus: data[2].rows });
     });
 });
 
