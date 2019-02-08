@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {faUserCircle, faUnlock, faSignInAlt} from '@fortawesome/free-solid-svg-icons';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {faSignInAlt, faUnlock, faUserCircle} from '@fortawesome/free-solid-svg-icons';
 
 import {AuthService} from '../services/auth.service';
 import {AlertService} from '../services/alert.service';
 
-import {ServerResponseError, ResponseMessage, ServerResponseOk} from '../interfaces/interfaces-list';
+import {ResponseMessage, ServerResponseError, ServerResponseOk} from '../interfaces/interfaces-list';
 
 @Component({
     selector: 'app-login-form',
@@ -14,6 +14,12 @@ import {ServerResponseError, ResponseMessage, ServerResponseOk} from '../interfa
     styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
+
+    public emailIcon = faUserCircle;
+    public passwordIcon = faUnlock;
+    public buttonIcon = faSignInAlt;
+    public errorMessageEmail = 'Please provide a email.';
+    public errorMessagePassword = 'Please provide a password.';
 
     loginForm: FormGroup = new FormGroup({
         loginEmail: new FormControl('', [
@@ -24,13 +30,6 @@ export class LoginFormComponent implements OnInit {
             Validators.required
         ]),
     });
-
-    emailIcon = faUserCircle;
-    passwordIcon = faUnlock;
-    buttonIcon = faSignInAlt;
-
-    errorMessageEmail = 'Please provide a email.';
-    errorMessagePassword = 'Please provide a password.';
 
     constructor(
         private router: Router,
@@ -45,7 +44,6 @@ export class LoginFormComponent implements OnInit {
                     (data: ResponseMessage) => {
                         localStorage.removeItem('tokenSession');
                         localStorage.removeItem('userName');
-                        this.alertService.alertSetSubject(data.message, 'warning');
                     },
                     (error: ServerResponseError) => {
                         error.status === 401 ?
@@ -56,14 +54,24 @@ export class LoginFormComponent implements OnInit {
         }
     }
 
-    validateEmailField(value) {
-        value === '' ?
-            this.errorMessageEmail = 'Please provide a email.'
-            : this.errorMessageEmail = 'Please provide a valid email.';
-    }
-
-    validatePasswordField(value) {
-        if (value === '') { this.errorMessagePassword = 'Please provide a password.'; }
+    validateField(value: string, type: number) {
+        switch (type) {
+            case 1: {
+                value === '' ?
+                    this.errorMessageEmail = 'Please provide a email.'
+                    : this.errorMessageEmail = 'Please provide a valid email.';
+                break;
+            }
+            case 2: {
+                if (value === '') {
+                    this.errorMessagePassword = 'Please provide a password.';
+                }
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     }
 
     onSubmit() {

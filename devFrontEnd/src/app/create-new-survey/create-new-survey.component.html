@@ -1,41 +1,68 @@
 <section class="container-fluid">
 
     <div class="col-12 mb-3">
-
         <div class="card">
 
             <h5 class="card-header">Create new survey</h5>
 
             <div class="card-body">
-                <form [formGroup]="createSurveyForm" novalidate (ngSubmit)="onSubmit()">
+                <form (ngSubmit)="onSubmit()" [formGroup]="createSurveyForm" novalidate>
 
-                    <div class="bmd-form-group">
+                    <div class="form-group">
                         <label for="selectEmployee">Select employee</label>
-                        <input type="text" class="form-control" id="selectEmployee" formControlName="employeeName"
-                               [ngbTypeahead]="searchEmployee" [resultTemplate]="resultTemplate" [inputFormatter]="formatterResult">
+                        <input [inputFormatter]="formatterResult" [ngbTypeahead]="searchEmployee"
+                               [resultTemplate]="resultTemplate" class="form-control"
+                               formControlName="employeeName" id="selectEmployee" type="text">
 
-                        <ng-template #resultTemplate let-r="result" let-t="term" class="result-template">
+                        <ng-template #resultTemplate let-r="result" let-t="term">
                             <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
                             <span class="ml-1">| {{ r.email }}</span>
                         </ng-template>
 
-                        <small class="form-text alert alert-danger"
-                               *ngIf="createSurveyForm.controls['employeeName'].invalid && createSurveyForm.controls['employeeName'].touched">
+                        <small
+                            *ngIf="createSurveyForm.controls['employeeName'].invalid && createSurveyForm.controls['employeeName'].touched"
+                            class="form-text alert alert-danger">
                             Please select a employee.
                         </small>
                     </div>
 
                     <div class="form-group">
                         <label for="selectDegrees">Select degree survey</label>
-                        <select id="selectDegrees" class="form-control" formControlName="surveyDegree">
-                            <option *ngFor="let item of degreesList" value="{{ item.id }}">{{ item.description }}</option>
+                        <select class="form-control" formControlName="surveyDegree" id="selectDegrees">
+                            <option *ngFor="let item of degreesList"
+                                    value="{{ item.id }}">{{ item.description }}</option>
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-raised w-sm-100"
-                            [disabled]="!createSurveyForm.valid">Create survey</button>
+                    <button [disabled]="!createSurveyForm.valid" class="btn btn-primary btn-raised w-sm-100"
+                            type="submit">
+                        Create survey
+                    </button>
 
                 </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-12 mb-3">
+
+        <div class="card">
+
+            <h5 class="card-header">Generated links for survey</h5>
+
+            <div class="card-body">
+                <div *ngFor="let link of arrayLinksToCopy; let i = index" class="input-group mb-3">
+                    <input #i class="form-control pr-2" type="text" value="{{ link }}">
+                    <div class="input-group-append">
+                        <button (click)="changeTooltipMessage(1)" (mouseout)="changeTooltipMessage(2)"
+                                [attr.aria-label]="tooltipMessage" [ngxClipboard]="i"
+                                class="btn btn-outline-info hint-top-left hint-bounce hint-info" type="button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
             </div>
 
         </div>

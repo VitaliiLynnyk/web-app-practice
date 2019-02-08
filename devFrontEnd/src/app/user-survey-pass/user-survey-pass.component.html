@@ -1,0 +1,76 @@
+<div class="wrapper">
+
+    <header class="header bg-primary">
+        <div class="header-content">
+            <img alt="Logo" class="header-logo" src="../../assets/img/logo.png">
+            Test System
+        </div>
+    </header>
+
+    <main class="content-wrapper container">
+
+        <div *ngIf="statusSurvey">
+            <div class="col-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        Information about survey
+                    </div>
+                </div>
+            </div>
+
+            <div *ngFor="let questionItem of questionArray; let i = index" class="col-12 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="mr-1 font-weight-bold">{{ i + 1 }}.</span>
+                        {{ questionItem.question }}
+                    </div>
+                    <ul [ngSwitch]="questionItem.answers[0].answer" class="list-group list-group-flush">
+                        <ng-template [ngSwitchCase]="null">
+                            <li *ngFor="let answerDetail of questionItem.answers" class="list-group-item">
+                                <div class="form-group">
+                                    <label for="{{ answerDetail.id }}">Enter the answer</label>
+                                    <textarea class="form-control answer-textarea" id="{{ answerDetail.id }}"
+                                              rows="3"></textarea>
+                                </div>
+                            </li>
+                        </ng-template>
+                        <ng-template ngSwitchDefault>
+                            <li *ngFor="let answerCheck of questionItem.answers" class="list-group-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input answer-checkbox" id="{{ answerCheck.id }}"
+                                           type="checkbox" value="{{ answerCheck.id }}">
+                                    <label class="custom-control-label"
+                                           for="{{ answerCheck.id }}">{{ answerCheck.answer }}</label>
+                                </div>
+                            </li>
+                        </ng-template>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-12 mb-3 text-center">
+                <button (click)="sendAnswers()" class="btn btn-raised btn-primary btn-lg" type="button">
+                    <fa-icon [icon]="sendIcon" class="mr-2"></fa-icon>
+                    Send
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="!statusSurvey" class="justify-content-center">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-4 align-self-center">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Survey is completed</h5>
+                        <p class="card-text">Click the button below to go to the previous page.</p>
+                        <button (click)="goBackHistory()" class="btn btn-outline-primary" type="button">
+                            <fa-icon [icon]="goBackIcon" class="mr-2"></fa-icon>
+                            Go back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</div>

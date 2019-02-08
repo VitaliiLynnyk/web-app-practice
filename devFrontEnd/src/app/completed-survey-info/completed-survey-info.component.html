@@ -1,13 +1,13 @@
 <section class="container-fluid">
 
     <div class="col-12 mb-3">
-        <a routerLink="/home/surveys-list" role="button" class="btn btn-success w-sm-100">
-            <fa-icon class="mr-2" [icon]="goBackIcon"></fa-icon>
+        <a class="btn btn-success w-sm-100" role="button" routerLink="/home/surveys-list">
+            <fa-icon [icon]="goBackIcon" class="mr-2"></fa-icon>
             Go back
         </a>
     </div>
 
-    <div class="col-12 mb-3" *ngFor="let survey of surveyData">
+    <div *ngFor="let survey of surveyData" class="col-12 mb-3">
         <div class="card">
 
             <div class="card-header">
@@ -19,7 +19,7 @@
                 <li class="list-group-item font-weight-bold">Answers:</li>
                 <app-survey-answer-item
                     *ngFor="let answer of survey.answers"
-                    [isRight]="answer.is_right" [answerText]="answer.answer"></app-survey-answer-item>
+                    [answerText]="answer.answer" [isRight]="answer.is_right"></app-survey-answer-item>
             </ul>
 
         </div>

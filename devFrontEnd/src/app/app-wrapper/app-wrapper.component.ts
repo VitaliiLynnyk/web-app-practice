@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {faSignOutAlt, faBars} from '@fortawesome/free-solid-svg-icons';
+import {faBars, faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-app-wrapper',
@@ -10,9 +10,9 @@ import {faSignOutAlt, faBars} from '@fortawesome/free-solid-svg-icons';
 export class AppWrapperComponent implements OnInit {
 
     public sidebarVisible = false;
-    burgerIcon = faBars;
-    logoutIcon = faSignOutAlt;
-    userName: string;
+    public burgerIcon = faBars;
+    public logoutIcon = faSignOutAlt;
+    public userName: string;
 
     constructor() {
     }

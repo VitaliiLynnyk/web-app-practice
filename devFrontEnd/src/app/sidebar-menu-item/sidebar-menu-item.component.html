@@ -1,7 +1,7 @@
-<li *ngFor="let item of itemArray" class="sidebar-block"
-    routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-    <a routerLink="{{ item.link }}" class="sidebar-link" (click)="changeMenu()">
-        <fa-icon class="fa-icon" [icon]="item.icon"></fa-icon>
+<li *ngFor="let item of itemArray" [routerLinkActiveOptions]="{exact:true}"
+    class="sidebar-block" routerLinkActive="active">
+    <a (click)="changeMenu()" class="sidebar-link" routerLink="{{ item.link }}">
+        <fa-icon [icon]="item.icon" class="fa-icon"></fa-icon>
         {{ item.name }}
     </a>
 </li>

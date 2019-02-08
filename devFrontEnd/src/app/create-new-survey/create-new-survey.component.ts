@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {debounceTime, map} from 'rxjs/operators';
 
@@ -7,7 +7,12 @@ import {SurveysService} from '../services/surveys.service';
 import {UsersService} from '../services/users.service';
 import {AlertService} from '../services/alert.service';
 
-import {ResponseMessage, ServerResponseError, SurveysDegreesItem, UserListItem} from '../interfaces/interfaces-list';
+import {
+    CreateSurveyResponse,
+    ServerResponseError,
+    SurveysDegreesItem,
+    UserListItem
+} from '../interfaces/interfaces-list';
 
 @Component({
     selector: 'app-create-new-survey',
@@ -15,6 +20,12 @@ import {ResponseMessage, ServerResponseError, SurveysDegreesItem, UserListItem} 
     styleUrls: ['./create-new-survey.component.scss']
 })
 export class CreateNewSurveyComponent implements OnInit {
+
+    public degreesList: Array<SurveysDegreesItem>;
+    public arrayLinksToCopy: Array<String> = [];
+    public tooltipMessage: string;
+
+    private userList: Array<UserListItem>;
 
     createSurveyForm: FormGroup = new FormGroup({
         employeeName: new FormControl('', [
@@ -24,17 +35,18 @@ export class CreateNewSurveyComponent implements OnInit {
         surveyDegree: new FormControl('', [])
     });
 
-    userList: Array<UserListItem>;
-    degreesList: Array<SurveysDegreesItem>;
-
     constructor(
         private surveysService: SurveysService,
         private userService: UsersService,
         private alertService: AlertService) {
     }
 
-    static selectEmployeeValidator(control: FormControl): {[s: string]: boolean} {
-        return !control.value.id ? {'employeeName': true} : null;
+    static selectEmployeeValidator(control: FormControl): { [s: string]: boolean } {
+        return control.value && control.value.id ? null : {'employeeName': true};
+    }
+
+    static createLinkSurvey(token: string, id: number) {
+        return 'http://localhost:4200/survey?token=' + token + '&id=' + id;
     }
 
     ngOnInit() {
@@ -57,6 +69,7 @@ export class CreateNewSurveyComponent implements OnInit {
                     this.alertService.alertSetSubject(error.error.message, 'warning');
                 }
             );
+        this.changeTooltipMessage(2);
     }
 
     searchEmployee = (text$: Observable<string>) => {
@@ -71,19 +84,38 @@ export class CreateNewSurveyComponent implements OnInit {
         );
     }
 
-    formatterResult(item: {name: string}) {
+    formatterResult(item: { name: string }) {
         return item.name;
+    }
+
+    changeTooltipMessage(type: number) {
+        switch (type) {
+            case 1: {
+                this.tooltipMessage = 'Copied!';
+                break;
+            }
+            case 2: {
+                this.tooltipMessage = 'Click to copy to clipboard';
+                break;
+            }
+            default: {
+                this.tooltipMessage = 'Click to copy to clipboard';
+                break;
+            }
+        }
     }
 
     onSubmit() {
         const formData = {
-            personId: this.createSurveyForm.get('employeeName').value.id,
-            degreeId: this.createSurveyForm.get('surveyDegree').value
+            personId: parseInt(this.createSurveyForm.get('employeeName').value.id, 10),
+            degreeId: parseInt(this.createSurveyForm.get('surveyDegree').value, 10)
         };
         this.surveysService.postCreateNewSurvey(formData)
             .subscribe(
-                (data: ResponseMessage) => {
-                    this.alertService.alertSetSubject(data.message, 'success');
+                (data: CreateSurveyResponse) => {
+                    this.alertService.alertSetSubject('New survey created', 'success');
+                    this.createSurveyForm.get('employeeName').reset();
+                    this.arrayLinksToCopy.push(CreateNewSurveyComponent.createLinkSurvey(data.random_url, data.survey_id));
                 },
                 (error: ServerResponseError) => {
                     this.alertService.alertSetSubject(error.error.message, 'warning');

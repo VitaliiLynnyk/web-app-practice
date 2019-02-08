@@ -21,10 +21,11 @@ export interface AlertObject {
 }
 
 export interface SurveyDetails {
-    description: string;
+    survey_id: number;
     firstname: string;
     lastname: string;
-    survey_id: number;
+    status: string;
+    description: string;
 }
 
 export interface SurveyInfo {
@@ -48,3 +49,28 @@ export interface UserListItem {
     email: string;
 }
 
+export interface CreateSurveyResponse {
+    random_url: string;
+    survey_id: number;
+}
+
+export interface SurveyQuestionsForPass {
+    question: string;
+    answers: Array<SurveyAnswerItemForPass>;
+}
+
+export interface SurveyAnswerItemForPass {
+    id: number;
+    answer: string;
+}
+
+export interface AnswerItemForSend {
+    surv_id: number;
+    answer_id: number;
+    full_answer: string;
+}
+
+export interface SurveyStatisticItem {
+    description: string;
+    count: number;
+}

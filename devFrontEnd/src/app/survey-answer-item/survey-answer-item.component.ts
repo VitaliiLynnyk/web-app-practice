@@ -1,6 +1,6 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
-import {faPlusSquare, faMinusSquare, faCheckSquare} from '@fortawesome/free-solid-svg-icons';
+import {faCheckSquare, faMinusSquare, faPenSquare} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-survey-answer-item',
@@ -9,13 +9,13 @@ import {faPlusSquare, faMinusSquare, faCheckSquare} from '@fortawesome/free-soli
 })
 export class SurveyAnswerItemComponent implements OnInit {
 
-    @Input() isRight: boolean;
-    @Input() answerText: string;
+    @Input() public isRight: boolean;
+    @Input() public answerText: string;
 
-    classNameColorIcon: string;
-    classNameColorTooltip: string;
-    iconName: any;
-    tooltipMessage: string;
+    public classNameColorIcon: string;
+    public classNameColorTooltip: string;
+    public tooltipMessage: string;
+    public iconName: any;
 
     constructor() {
     }
@@ -27,7 +27,7 @@ export class SurveyAnswerItemComponent implements OnInit {
     checkTypeAnswer() {
         if (this.isRight === true) {
             this.changeCorrectnessSettings(
-                faPlusSquare,
+                faPenSquare,
                 'text-success',
                 'hint-success',
                 'Correct answer');

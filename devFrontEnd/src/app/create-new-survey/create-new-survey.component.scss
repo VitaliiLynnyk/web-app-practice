@@ -1,5 +1,5 @@
-$errorColor: #F44336;
-$successColor: #4CAF50;
+$errorColor: #f44336;
+$successColor: #4caf50;
 
 .container-fluid {
     padding-top: 15px;
@@ -8,20 +8,18 @@ $successColor: #4CAF50;
     input, select {
 
         &:focus {
-            background-image:
-                linear-gradient(0deg, #3F51B5 2px, rgba(63, 81, 181, 0) 0),
-                linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0);
+            background-image: linear-gradient(0deg, rgb(65, 105, 225) 2px, rgba(63, 81, 181, 0) 0),
+            linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0);
         }
 
         &.ng-touched.ng-invalid {
             border-color: $errorColor;
 
             &:focus {
-                box-shadow: 0 0 0 0.2rem rgba(244, 67, 54, .25);
                 border-color: $errorColor;
-                background-image:
-                    linear-gradient(0deg, #D50000 2px, rgba(213, 0, 0, 0) 0),
-                    linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0);
+                background-image: linear-gradient(0deg, rgb(213, 0, 0) 2px, rgba(213, 0, 0, 0) 0),
+                linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0);
+                box-shadow: 0 0 0 0.2rem rgba(244, 67, 54, .25);
             }
         }
 
@@ -29,11 +27,10 @@ $successColor: #4CAF50;
             border-color: $successColor;
 
             &:focus {
-                box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, .25);
                 border-color: $successColor;
-                background-image:
-                    linear-gradient(0deg, #009688 2px, rgba(0, 150, 136, 0) 0),
-                    linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0);
+                background-image: linear-gradient(0deg, rgb(0, 150, 136) 2px, rgba(0, 150, 136, 0) 0),
+                linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0);
+                box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, .25);
             }
         }
     }

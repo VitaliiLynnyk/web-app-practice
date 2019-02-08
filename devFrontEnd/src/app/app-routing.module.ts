@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 
 import {LoginFormComponent} from './login-form/login-form.component';
 import {AppWrapperComponent} from './app-wrapper/app-wrapper.component';
@@ -8,8 +8,10 @@ import {HomeContentComponent} from './home-content/home-content.component';
 import {SurveysListComponent} from './surveys-list/surveys-list.component';
 import {CompletedSurveyInfoComponent} from './completed-survey-info/completed-survey-info.component';
 import {CreateNewSurveyComponent} from './create-new-survey/create-new-survey.component';
+import {UserSurveyPassComponent} from './user-survey-pass/user-survey-pass.component';
 
 import {AuthGuard} from './guards/auth.guard';
+import {SurveyGuard} from './guards/survey.guard';
 
 const appRouter: Routes = [
     {path: '', component: LoginFormComponent},
@@ -21,6 +23,7 @@ const appRouter: Routes = [
             {path: 'create-survey', component: CreateNewSurveyComponent}
         ]
     },
+    {path: 'survey', component: UserSurveyPassComponent, canActivate: [SurveyGuard]},
     {path: '**', component: NotFoundComponent}
 ];
 

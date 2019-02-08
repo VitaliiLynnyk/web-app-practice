@@ -1,5 +1,5 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
-import {faHome, faFileAlt, faPenSquare} from '@fortawesome/free-solid-svg-icons';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {faFileAlt, faHome, faPenSquare} from '@fortawesome/free-solid-svg-icons';
 
 const menuItemArray = [
     {
@@ -28,7 +28,7 @@ export class SidebarMenuItemComponent implements OnInit {
 
     @Output() changeMenuState = new EventEmitter<boolean>();
 
-    itemArray = menuItemArray;
+    public  itemArray = menuItemArray;
 
     constructor() {
     }

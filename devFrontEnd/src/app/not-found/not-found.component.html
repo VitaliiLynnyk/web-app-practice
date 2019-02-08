@@ -9,10 +9,10 @@
             <p class="error-description">Sorry, but the page you were trying to view does not exist.</p>
 
             <p>
-                <a class="btn btn-outline-secondary btn-sm" routerLink="/home" role="button">
-                    <fa-icon class="mr-2" [icon]="goBackIcon"></fa-icon>
+                <button (click)="goBackHistory()" class="btn btn-outline-secondary btn-sm" type="button">
+                    <fa-icon [icon]="goBackIcon" class="mr-2"></fa-icon>
                     Go back
-                </a>
+                </button>
             </p>
 
         </div>

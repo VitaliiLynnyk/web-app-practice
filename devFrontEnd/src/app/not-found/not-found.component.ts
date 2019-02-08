@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Location} from '@angular/common';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -8,12 +9,15 @@ import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 })
 export class NotFoundComponent implements OnInit {
 
-    goBackIcon = faArrowLeft;
+    public goBackIcon = faArrowLeft;
 
-    constructor() {
+    constructor(private location: Location) {
     }
 
     ngOnInit() {
     }
 
+    goBackHistory() {
+        this.location.back();
+    }
 }

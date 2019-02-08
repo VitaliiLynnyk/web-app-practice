@@ -11,11 +11,12 @@ import {AlertObject} from '../interfaces/interfaces-list';
 })
 export class AlertCloseableComponent implements OnInit {
 
-    alertMessage: string;
-    typeMessage: string;
-    timerContainer: any;
-    showingAlert = false;
-    timeMessage = 5000;
+    public alertMessage: string;
+    public typeMessage: string;
+    public showingAlert = false;
+
+    private timerContainer: any;
+    private timeMessage = 5000;
 
     constructor(private alertService: AlertService) {
         this.alertService.alertSubscription$.subscribe((temp: AlertObject) => {
@@ -28,7 +29,7 @@ export class AlertCloseableComponent implements OnInit {
                 if (temp.timeAlert) {
                     this.timeMessage = temp.timeAlert;
                 }
-                this.showAlert();
+                setTimeout(() => this.showAlert(), 300);
             }
         });
     }

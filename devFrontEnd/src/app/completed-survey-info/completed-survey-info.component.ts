@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router';
-import {Subscription} from 'rxjs';
-
+import {ActivatedRoute, Router} from '@angular/router';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import {Subscription} from 'rxjs';
 
 import {SurveysService} from '../services/surveys.service';
 import {AlertService} from '../services/alert.service';
@@ -16,11 +15,11 @@ import {ServerResponseError, SurveyInfo} from '../interfaces/interfaces-list';
 })
 export class CompletedSurveyInfoComponent implements OnInit {
 
-    idSurvey: number;
-    querySubscription: Subscription;
-    surveyData: Array<SurveyInfo>;
+    public surveyData: Array<SurveyInfo>;
+    public goBackIcon = faArrowLeft;
 
-    goBackIcon = faArrowLeft;
+    private idSurvey: number;
+    private querySubscription: Subscription;
 
     constructor(
         private router: Router,
@@ -28,11 +27,7 @@ export class CompletedSurveyInfoComponent implements OnInit {
         private alertService: AlertService,
         private surveyService: SurveysService) {
         this.querySubscription = activatedRoute.queryParams.subscribe(
-            (queryParam: any) => {
-                    this.idSurvey = queryParam['id'];
-                    console.log(queryParam);
-                }
-            );
+            (queryParam: any) => this.idSurvey = queryParam['id']);
     }
 
     ngOnInit() {
@@ -43,7 +38,11 @@ export class CompletedSurveyInfoComponent implements OnInit {
                         this.surveyData = data;
                     },
                     (error: ServerResponseError) => {
-                        this.alertService.alertSetSubject(error.error.message, 'warning');
+                        error.status === 404 ?
+                            this.alertService.alertSetSubject(
+                                '№' + this.idSurvey + ' ' + error.error.message,
+                                'warning')
+                            : this.alertService.alertSetSubject(error.error.message, 'warning');
                         this.router.navigate(['home/surveys-list']);
                     }
                 );

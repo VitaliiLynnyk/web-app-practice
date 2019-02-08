@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {SurveysService} from '../services/surveys.service';
 import {AlertService} from '../services/alert.service';
 
-import {SurveyDetails, ServerResponseError} from '../interfaces/interfaces-list';
+import {ServerResponseError, SurveyDetails} from '../interfaces/interfaces-list';
 
 @Component({
     selector: 'app-surveys-list',
@@ -13,7 +13,7 @@ import {SurveyDetails, ServerResponseError} from '../interfaces/interfaces-list'
 })
 export class SurveysListComponent implements OnInit {
 
-    surveysArray: Array<SurveyDetails>;
+    public surveysArray: Array<SurveyDetails>;
 
     constructor(
         private router: Router,
