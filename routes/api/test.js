@@ -21,7 +21,7 @@ router.get("/personsTokens", (req, res, next) => {
   });
 });
 
-router.get("/statistics", (req, res, next) => {
+router.get("/statistics",checkAuthentication(false), (req, res, next) => {
   pool.query(
     `
      select count(*) as allPersons from Person where is_admin=false;
