@@ -1,0 +1,10 @@
+.alert-container {
+    position: fixed;
+    z-index: 5;
+    width: 96%;
+    margin: 2vh 2%;
+
+    .alert-visible {
+        cursor: pointer;
+    }
+}

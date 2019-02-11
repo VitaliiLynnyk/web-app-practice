@@ -1,0 +1,20 @@
+<div [ngSwitch]="description">
+    <ng-template ngSwitchCase="Total persons">
+        <div class="col-12 mb-3">
+            <div class="card bg-light text-center">
+                <div class="card-body font-weight-bold">
+                    {{ description.toUpperCase() }}: {{ count }}
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template ngSwitchDefault>
+        <div class="col-12 mb-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body font-weight-bold">
+                    {{ description.toUpperCase() }}: {{ count }}
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>

@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="row justify-content-center h-100">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 align-self-center">
+
+            <div class="card bg-light">
+                <div class="card-body">
+
+                    <h5 class="card-title text-center mb-4">Sign in to Test System</h5>
+
+                    <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" novalidate>
+
+                        <div class="form-group mb-4">
+                            <div class="input-group mb-2">
+
+                                <div class="input-group-prepend mr-3">
+                                    <span class="input-group-text">
+                                        <fa-icon [icon]="emailIcon"></fa-icon>
+                                    </span>
+                                </div>
+
+                                <input (input)="validateField($event.target.value, 1)" autofocus
+                                       class="form-control" formControlName="loginEmail" id="loginEmail"
+                                       placeholder="Enter email" type="email">
+                            </div>
+
+                            <small
+                                *ngIf="loginForm.controls['loginEmail'].invalid && loginForm.controls['loginEmail'].touched"
+                                class="form-text alert alert-danger">{{ errorMessageEmail }}</small>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <div class="input-group mb-2">
+
+                                <div class="input-group-prepend mr-3">
+                                    <span class="input-group-text">
+                                        <fa-icon [icon]="passwordIcon"></fa-icon>
+                                    </span>
+                                </div>
+
+                                <input (input)="validateField($event.target.value, 2)" class="form-control"
+                                       formControlName="loginPassword" id="loginPassword"
+                                       placeholder="Enter password" type="password">
+                            </div>
+
+                            <small
+                                *ngIf="loginForm.controls['loginPassword'].invalid && loginForm.controls['loginPassword'].touched"
+                                class="form-text alert alert-danger">{{ errorMessagePassword }}</small>
+                        </div>
+
+                        <div class="text-center">
+                            <button [disabled]="!loginForm.valid" class="btn btn-raised btn-primary" type="submit">
+                                <fa-icon [icon]="buttonIcon" class="mr-2"></fa-icon>
+                                Login
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

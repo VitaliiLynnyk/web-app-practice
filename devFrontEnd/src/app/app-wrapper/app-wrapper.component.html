@@ -1,0 +1,48 @@
+<div class="wrapper">
+
+    <header class="header bg-primary">
+
+        <button (click)="toggleSidebar()" class="btn sidebar-toggler" type="button">
+            <fa-icon [icon]="burgerIcon" class="fa-icon"></fa-icon>
+        </button>
+
+        <div class="header-content">
+            <a class="btn header-brand" routerLink="/home">
+                <img alt="Logo" class="header-logo" src="../../assets/img/logo.png">
+                Test System
+            </a>
+        </div>
+
+    </header>
+
+    <nav (click)="toggleSidebar()" [class.visible]="sidebarVisible" class="sidebar-wrapper">
+        <ul (click)="stopEventClick($event)" [class.visible]="sidebarVisible" class="sidebar-nav bg-primary">
+
+            <li class="sidebar-block">
+                <div class="account-info">
+                    <img alt="User icon" class="user-icon" src="../../assets/img/user-icon-128.png">
+                    <div class="nickname">{{ userName }}</div>
+                </div>
+            </li>
+
+            <app-sidebar-menu-item (changeMenuState)="closeMenu($event)"></app-sidebar-menu-item>
+
+            <li class="sidebar-block">
+                <hr class="separator">
+            </li>
+
+            <li [routerLinkActiveOptions]="{exact:true}" class="sidebar-block" routerLinkActive="active">
+                <a class="sidebar-link" routerLink="/">
+                    <fa-icon [icon]="logoutIcon" class="fa-icon"></fa-icon>
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+
+    <main [class.fix-main-content]="sidebarVisible" class="content-wrapper">
+        <router-outlet></router-outlet>
+    </main>
+
+</div>

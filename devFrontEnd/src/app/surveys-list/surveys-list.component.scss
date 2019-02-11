@@ -1,0 +1,50 @@
+.container-fluid {
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    .card-body {
+
+        .table {
+
+            thead {
+
+                th {
+                    font-weight: bold;
+                    vertical-align: middle;
+
+                    &:first-child, &:last-child {
+                        text-align: center;
+                    }
+                }
+            }
+
+            tbody {
+
+                td {
+                    vertical-align: middle;
+
+                    &:first-child, &:last-child {
+                        text-align: center;
+                    }
+
+                    &:first-child {
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .card {
+        padding-left: 15px;
+        padding-right: 15px;
+
+        .card-body {
+            overflow-x: scroll;
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
+}

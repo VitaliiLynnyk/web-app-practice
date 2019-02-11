@@ -1,0 +1,28 @@
+<section class="container-fluid">
+
+    <div class="col-12 mb-3">
+        <a class="btn btn-success w-sm-100" role="button" routerLink="/home/surveys-list">
+            <fa-icon [icon]="goBackIcon" class="mr-2"></fa-icon>
+            Go back
+        </a>
+    </div>
+
+    <div *ngFor="let survey of surveyData" class="col-12 mb-3">
+        <div class="card">
+
+            <div class="card-header">
+                <span class="font-weight-bold">Question: </span>
+                {{ survey.question }}
+            </div>
+
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item font-weight-bold">Answers:</li>
+                <app-survey-answer-item
+                    *ngFor="let answer of survey.answers"
+                    [answerText]="answer.answer" [isRight]="answer.is_right"></app-survey-answer-item>
+            </ul>
+
+        </div>
+    </div>
+
+</section>
