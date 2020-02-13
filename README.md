@@ -1,5 +1,12 @@
 # web-app-practice
 
+The site is available => https://affectionate-jackson-57aab8.netlify.com/
+
+Сredentials without admin rights => {
+  email: joker@joker,
+  password: joker
+}
+
 This web application was created for companies to facilitate the selection process.
 All questions csv files -> https://github.com/VitaliiLynnyk/web-app-practice/tree/devBackEnd/module/liquibase/resources/files
 
