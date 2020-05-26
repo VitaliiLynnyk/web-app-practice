@@ -10,7 +10,7 @@ let cors = require('cors');
 
 let flash = require("connect-flash");
 const port = process.env.PORT || 8888;
-app.use(cors({credentials: true, origin: 'https://affectionate-jackson-57aab8.netlify.com'}));
+app.use(cors({credentials: true, origin: 'https://test-system.netlify.app'}));
 
 app.use(flash());
 
